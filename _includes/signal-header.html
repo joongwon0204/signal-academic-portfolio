@@ -1,0 +1,34 @@
+{% assign profile = site.data.profile %}
+{% assign is_publications = false %}
+{% assign is_experiences = false %}
+{% assign is_notes = false %}
+{% if page.url == '/publications/' or page.collection == 'publications' %}
+  {% assign is_publications = true %}
+{% endif %}
+{% if page.url == '/experiences/' or page.collection == 'experiences' %}
+  {% assign is_experiences = true %}
+{% endif %}
+{% if page.url == '/notes/' or page.collection == 'posts' %}
+  {% assign is_notes = true %}
+{% endif %}
+
+<header class="signal-header" data-signal-header>
+  <div class="signal-shell signal-header__inner">
+    <a class="signal-brand" href="{{ '/' | relative_url }}" aria-label="{{ profile.display_name }} — Home">
+      <span class="signal-brand__name">{{ profile.display_name }}</span>
+    </a>
+
+    <button class="signal-menu" type="button" aria-expanded="false" aria-controls="signal-navigation" data-signal-menu>
+      <span class="signal-menu__label">Menu</span>
+      <span class="signal-menu__icon" aria-hidden="true"><i></i><i></i></span>
+    </button>
+
+    <nav class="signal-nav" id="signal-navigation" aria-label="Primary navigation" data-signal-nav>
+      <a href="{{ '/publications/' | relative_url }}"{% if is_publications %} class="is-active" aria-current="page"{% endif %}>Publications</a>
+      <a href="{{ '/experiences/' | relative_url }}"{% if is_experiences %} class="is-active" aria-current="page"{% endif %}>Experiences</a>
+      <a href="{{ '/notes/' | relative_url }}"{% if is_notes %} class="is-active" aria-current="page"{% endif %}>Notes</a>
+      <a href="{{ '/cv/' | relative_url }}"{% if page.url == '/cv/' %} class="is-active" aria-current="page"{% endif %}>CV</a>
+    </nav>
+  </div>
+  <div class="signal-header__rule" aria-hidden="true"><i></i></div>
+</header>

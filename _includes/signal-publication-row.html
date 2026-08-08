@@ -1,0 +1,28 @@
+{% assign publication = include.publication %}
+{% assign publication_type = publication.type | default: publication.category | downcase %}
+{% assign primary_author = publication.primary_author | default: site.data.profile.display_name %}
+{% if publication.paperurl %}
+  {% assign publication_link = publication.paperurl %}
+{% else %}
+  {% assign publication_link = publication.url | relative_url %}
+{% endif %}
+<a class="signal-publication-row" href="{{ publication_link }}"{% if publication.paperurl %} target="_blank" rel="noopener noreferrer"{% endif %} data-signal-category="{{ publication_type }}" aria-label="Open paper: {{ publication.title | escape }}">
+  <span class="signal-publication-row__visual" aria-hidden="true">
+    <span>{{ publication.thumbnail_label | default: publication_type | upcase }}</span>
+  </span>
+  <span class="signal-publication-row__content">
+    {% if publication.venue or publication.highlight %}
+      <span class="signal-publication-row__meta">
+        {% if publication.venue %}<span class="signal-publication-row__venue">{{ publication.venue }}</span>{% endif %}
+        {% if publication.highlight %}<span class="signal-publication-row__highlight">{{ publication.highlight }}</span>{% endif %}
+      </span>
+    {% endif %}
+    <span class="signal-publication-row__title">{{ publication.title }}</span>
+    {% if publication.authors %}
+      <span class="signal-publication-row__authors">
+        {% for author in publication.authors %}<span{% if author == primary_author %} class="is-primary"{% endif %}>{{ author }}</span>{% unless forloop.last %}{% if forloop.rindex == 2 %} and {% else %}, {% endif %}{% endunless %}{% endfor %}
+      </span>
+    {% endif %}
+  </span>
+  <span class="signal-publication-row__arrow" aria-hidden="true">↗</span>
+</a>

@@ -1,0 +1,43 @@
+{% assign item = include.item %}
+{% assign content_kind = include.kind | default: 'note' %}
+{% assign organization = nil %}
+
+{% if content_kind == 'experience' %}
+  {% assign category_slug = item.category %}
+  {% assign period = item.period %}
+  {% assign organization = item.organization %}
+  {% assign summary = item.summary %}
+  {% assign item_link = item.link | default: item.url %}
+  {% assign category_groups = site.data.content_groups.experiences %}
+{% else %}
+  {% assign category_slug = item.categories | first %}
+  {% assign period = item.date | date: "%b %d, %Y" | upcase %}
+  {% assign summary = item.subtitle %}
+  {% assign item_link = item.link | default: item.url %}
+  {% assign category_groups = site.data.content_groups.notes %}
+{% endif %}
+
+{% assign category_label = category_slug %}
+{% for category_group in category_groups %}
+  {% if category_group.slug == category_slug %}
+    {% assign category_label = category_group.label %}
+  {% endif %}
+{% endfor %}
+
+{% assign is_external_link = false %}
+{% if item_link contains '://' %}{% assign is_external_link = true %}{% endif %}
+
+<a class="signal-experience-row{% if content_kind == 'note' %} signal-experience-row--note{% endif %}" data-content-kind="{{ content_kind }}" data-content-category="{{ category_slug }}" href="{% if is_external_link %}{{ item_link }}{% else %}{{ item_link | relative_url }}{% endif %}"{% if is_external_link %} target="_blank" rel="noopener noreferrer"{% endif %}>
+  {% if content_kind == 'note' %}
+    <time class="signal-experience-row__period" datetime="{{ item.date | date_to_xmlschema }}">{{ period }}</time>
+  {% else %}
+    <span class="signal-experience-row__period">{{ period }}</span>
+  {% endif %}
+  <span class="signal-experience-row__content">
+    {% if organization %}<span class="signal-experience-row__organization">{{ organization }}</span>{% endif %}
+    <h3>{{ item.title }}</h3>
+    {% if summary %}<p>{{ summary }}</p>{% endif %}
+  </span>
+  <span class="signal-experience-row__type">{{ category_label }}</span>
+  <span class="signal-experience-row__arrow" aria-hidden="true">→</span>
+</a>

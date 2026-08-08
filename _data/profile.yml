@@ -1,0 +1,26 @@
+display_name: "Your Name"
+given_name: "Your"
+family_name: "Name"
+native_name:
+eyebrow: "Portfolio"
+summary: "Use this line for your degree, role, institution, or professional focus."
+intro: "Write a short introduction that explains who you are, what you work on, and what visitors can find in this portfolio."
+
+image:
+  path: "/images/profile.png"
+  alt: "Abstract circuit-board pattern illuminated in violet, blue, and cyan"
+
+research:
+  section_label: "Research Interest"
+  heading: "Research Interest"
+  intro: "Use three connected topics to show how your main research areas relate to one another."
+  interests:
+    - key: "codesign"
+      short_label: "Primary Research Area"
+      full_label: "Primary Research Area"
+    - key: "accelerators"
+      short_label: "Supporting Method"
+      full_label: "Supporting Method"
+    - key: "inference"
+      short_label: "Application Domain"
+      full_label: "Application Domain"

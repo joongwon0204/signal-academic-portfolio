@@ -1,0 +1,10 @@
+<footer class="signal-footer">
+  <div class="signal-shell signal-footer__inner">
+    <nav class="signal-footer__links" aria-label="Contact links">
+      <a href="{{ '/cv/' | relative_url }}">CV</a>
+      {% if site.author.github %}<a href="https://github.com/{{ site.author.github }}">GitHub</a>{% endif %}
+      {% if site.author.email %}<a href="mailto:{{ site.author.email }}">Email</a>{% endif %}
+    </nav>
+  </div>
+  <div class="signal-shell signal-footer__rule" aria-hidden="true"><i></i></div>
+</footer>

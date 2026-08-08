@@ -1,0 +1,44 @@
+---
+layout: signal
+---
+
+{% assign primary_category = page.categories | first %}
+{% assign is_note_article = false %}
+{% if page.collection == 'posts' %}
+  {% assign is_note_article = true %}
+{% endif %}
+{% assign archive_url = '/notes/' %}
+{% assign archive_label = 'Back to notes' %}
+{% if page.collection == 'publications' %}
+  {% assign archive_url = '/publications/' %}
+  {% assign archive_label = 'Back to publications' %}
+{% elsif page.collection == 'experiences' %}
+  {% assign archive_url = '/experiences/' %}
+  {% assign archive_label = 'Back to experiences' %}
+{% endif %}
+{% if page.back_url %}{% assign archive_url = page.back_url %}{% endif %}
+{% if page.back_label %}{% assign archive_label = page.back_label %}{% endif %}
+<article class="signal-shell signal-article{% if is_note_article %} signal-article--note{% endif %}" itemscope itemtype="https://schema.org/Article">
+  <header class="signal-article__head signal-reveal">
+    <div class="signal-article__meta">
+      <span>{{ primary_category | default: page.collection | default: 'NOTE' | upcase }}</span>
+      {% if page.date %}<time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%b %d, %Y' | upcase }}</time>{% endif %}
+    </div>
+    <h1 itemprop="headline">{{ page.title }}</h1>
+    {% if page.subtitle %}<p class="signal-article__subtitle">{{ page.subtitle }}</p>{% endif %}
+    {% if page.read_time %}
+      <p class="signal-article__reading">{% include read-time.html %}</p>
+    {% endif %}
+    {% include signal-circuit.html class="signal-article__circuit" %}
+  </header>
+
+  <div class="signal-article__body signal-prose signal-reveal" itemprop="articleBody">
+    {{ content }}
+  </div>
+
+  <footer class="signal-article__footer signal-reveal">
+    <a href="{{ archive_url | relative_url }}">
+      <span aria-hidden="true">←</span> {{ archive_label }}
+    </a>
+  </footer>
+</article>
