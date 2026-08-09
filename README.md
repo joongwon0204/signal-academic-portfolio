@@ -21,15 +21,17 @@ The Home page combines a profile hero, an interactive three-node research-intere
 
 ![Full Signal Academic Portfolio home page](images/screenshots/home.png)
 
-### Publications
+### Shared archive engine
 
-Publications use the shared archive generator in year-grouping mode. Their category filters are generated directly from publication Markdown without maintaining separate HTML sections.
+Publications, Experiences, and Notes below are not three separately implemented page components. They are three configurations of the same archive layout:
+
+- Publications selects year grouping and the publication cell. Its category filters come directly from publication Markdown.
+- Experiences selects category grouping and the adaptive general cell from a Jekyll collection.
+- Notes selects category grouping and the same adaptive general cell from dated posts.
+
+**Publications archive**
 
 ![Full Signal Academic Portfolio publications page](images/screenshots/publications.png)
-
-### Archive pages
-
-Experiences and Notes demonstrate the same shared archive design: Markdown entries are grouped by category, rendered as consistent rows, and connected to generated detail pages. They use different content sources, but they are not separate page components.
 
 **Experiences archive**
 
@@ -67,7 +69,13 @@ The CV is assembled from ordered Markdown cells and keeps its timeline, section 
 4. Replace the neutral example Markdown and image files described below.
 5. In **Settings → Pages**, select **GitHub Actions** as the source.
 
-The template has three content workflows: Main page, shared archive pages, and CV. Publications, Experiences, Notes, and Talks are configured instances of the same archive generator.
+The template has three rendering paths:
+
+1. **Home** composes profile data, the interactive research map, and previews from configured archives.
+2. **Archive engine** generates Publications, Experiences, Notes, Talks, or any new list page from one shared layout.
+3. **CV engine** builds an ordered timeline from reusable Markdown cells.
+
+Publications is not a separate page system. It is one archive configuration that uses year grouping and the publication cell.
 
 ### 0. File structure and generation mechanism
 
@@ -88,7 +96,7 @@ The repository separates content, page configuration, rendering, and presentatio
 ├── _publications/               # One Markdown file per publication
 ├── _cv/                         # One Markdown file per CV cell
 ├── _layouts/                    # Shared page shells and archive-generation logic
-├── _includes/                   # Three archive cells, header, footer, CV cells, and graphics
+├── _includes/                   # Archive dispatcher, adaptive rows, CV cells, and shared chrome
 ├── assets/
 │   ├── css/signal.scss          # Responsive visual system
 │   └── js/signal.js             # Filters, hover states, navigation, and interactions
@@ -106,6 +114,41 @@ Generation follows the same pipeline across the site:
 6. **Deployment** — the GitHub Pages workflow builds the resulting static HTML whenever the configured branch is published.
 
 In practice, content edits belong in Markdown, ordering and labels belong in YAML, and reusable HTML changes belong in `_layouts/` or `_includes/`.
+
+#### Include component map
+
+Files in `_includes/` are reusable Liquid/HTML fragments. Layouts own page-level structure; includes own repeated interface pieces and small rendering decisions.
+
+```text
+signal-content-row.html
+├── cell: publication ──→ signal-publication-row.html
+└── any general cell ───→ signal-plain-row.html
+                           ├── thumbnail present ──→ add the image region
+                           └── thumbnail empty ────→ omit the image region
+
+cv/cell.html
+├── template: entry ────→ cv/entry.html
+└── template: pairs ────→ cv/pairs.html
+```
+
+The row components are:
+
+- `_includes/signal-content-row.html` — the archive-row dispatcher. It normalizes the date or `period`, category label, organization, summary, and internal or external link before selecting the renderer.
+- `_includes/signal-plain-row.html` — the one adaptive row used by general archives such as Experiences, Notes, and Talks. It renders the period, optional thumbnail, organization, title, summary, category, and arrow. A non-empty `thumbnail` or `image` adds the image composition; an empty value uses the same component without reserving image space.
+- `_includes/signal-publication-row.html` — the publication-specific row. It renders the generated visual label, venue, optional highlight, paper title, author list, primary-author emphasis, and paper or detail-page link.
+
+There is intentionally no separate thumbnail-row component. Thumbnail display is an optional state of the general row, not an archive-level cell type. One archive still selects one cell family through `_data/content_archives.yml`: `archive` for the adaptive general row or `publication` for the paper-specific row.
+
+The remaining shared includes are:
+
+- `_includes/signal-header.html` and `_includes/signal-footer.html` — site navigation and footer links;
+- `_includes/signal-circuit.html` — the reusable circuit-line graphic used by page headers and empty states;
+- `_includes/head.html`, `_includes/head/custom.html`, and `_includes/seo.html` — styles, icons, metadata, and optional custom `<head>` additions;
+- `_includes/read-time.html` — estimated reading time for generated detail pages;
+- `_includes/cv/cell.html` — the CV-cell dispatcher;
+- `_includes/cv/entry.html` — standard CV entries with headings, dates, body copy, and optional structured facts;
+- `_includes/cv/pairs.html` — compact label/value lists for coursework, skills, and similar sections;
+- `_includes/base_path` — the shared URL base used by head and SEO includes.
 
 ### 1. Main page
 
@@ -143,142 +186,106 @@ The supplied research diagram has three fixed node positions. Replace the labels
 
 The Home page automatically shows the newest entries from the Experiences and Notes archives. Adding or reordering archive content therefore updates both its archive page and the Home preview.
 
-### 2. Archive pages
+### 2. Shared archive engine
 
-Publications, Experiences, Notes, and Talks are configured instances of the same `signal-collection` archive layout. Each archive is connected by one unique `key`:
+Publications, Experiences, Notes, and Talks all use `_layouts/signal-collection.html`. An archive is the combination of four pieces:
 
-1. `_pages/<key>.md` defines the page title, introduction, canonical URL, and `key`.
-2. `_data/content_archives.yml` selects the content source, grouping mode, and one cell component for the whole archive.
-3. For category-grouped archives, `_data/content_groups.yml` defines category order, section headings, and row labels.
-4. Markdown entries provide their date, category, title, summary, and optional destination URL.
-5. `_data/navigation.yml` optionally exposes the page in the top menu using the same `key`.
+1. a page definition in `_pages/`;
+2. an engine configuration in `_data/content_archives.yml`;
+3. Markdown entries in the configured source;
+4. optional category labels in `_data/content_groups.yml`.
 
-The page permalink remains independent. Navigation, active states, and detail-page return links resolve the page through `key`, so changing `/notes/` to `/writing/` requires changing only the page permalink.
-
-The archive generator supports two grouping modes and two archive-level cell components:
+There is no Publications-only archive HTML. The current four pages differ only through this data:
 
 ```yaml
-publications:
-  source: "publications"
-  group_by: "year"
-  cell: "publication"
-
+# _data/content_archives.yml
 experiences:
   source: "experiences"
   group_by: "category"
   cell: "archive"
+
+notes:
+  source: "posts"
+  group_by: "category"
+  cell: "archive"
+
+talks:
+  source: "posts"
+  group_by: "category"
+  cell: "archive"
+
+publications:
+  source: "publications"
+  group_by: "year"
+  cell: "publication"
 ```
 
-- `group_by: year` creates year headings and automatically adds filter buttons from the entries' unique `category` values.
-- `group_by: category` creates the category sections defined in `_data/content_groups.yml` and does not display filter buttons.
-- `cell: publication` renders paper metadata, authors, and the publication visual.
-- `cell: archive` renders the shared Experiences/Notes-style row. It automatically shows the thumbnail layout when an entry has `thumbnail` or `image`; otherwise it renders the plain layout.
+The archive `key` joins the page, engine configuration, navigation, post selection, active menu state, and detail-page return link. The URL remains independent: navigation finds the page by `key` and uses that page's `permalink`.
 
-The configured `cell` applies to every entry in that archive. Individual Markdown files cannot override it, which keeps each archive visually consistent while the shared `archive` component handles optional thumbnails internally.
+#### Archive settings
 
-#### Add content to an archive
+- `source` selects a Jekyll collection such as `experiences` or `publications`. The special value `posts` selects matching files from `_posts/`.
+- `group_by: category` creates ordered sections from `_data/content_groups.yml`.
+- `group_by: year` creates year sections from each entry's `date` and generates filter buttons from the unique `category` values found in those entries.
+- `cell: archive` uses the general-purpose row shared by Experiences, Notes, and Talks.
+- `cell: publication` uses the paper-specific metadata row.
 
-Every entry becomes a row under the configured year or category group. The source registered in `_data/content_archives.yml` determines where its Markdown files live:
+One archive uses one cell setting. Entries do not choose their own component, so a single archive cannot accidentally mix unrelated row designs. The general `archive` cell still adapts internally: entries with `thumbnail` or `image` use the thumbnail composition, and entries without either field use the plain composition.
 
-- collection-backed archives such as Experiences read files from `_experiences/`;
-- post-backed archives such as Notes and Talks read dated files from `_posts/` and select entries by `key`.
+#### Page definition
 
-Both formats participate in the same grouping, sorting, row interaction, detail-page, and return-link system:
-
-Collection-backed entry:
+Every archive page is intentionally thin. `_pages/notes.md`, for example, contains only page-level text and routing data:
 
 ```yaml
 ---
-title: "Research Assistant, Example Lab"
-date: 2026-01-01
-period: "2026 – Present"
-category: "research"
-organization: "Example University"
-summary: "One concise sentence describing the role and contribution."
-link: "https://example.com/project"
----
-
-Optional detail-page content can be written here in Markdown.
-```
-
-Post-backed entry:
-
-```yaml
----
-layout: single
-title: "A Reproducible Research Workflow"
-subtitle: "A short description shown in the archive row"
+layout: signal-collection
+title: "Notes"
+description: "Notes page description."
+intro: "A short introduction shown below the title."
+permalink: /notes/
 key: notes
-categories: [project]
+section_number: "03"
 ---
-
-## First section
-
-Write the complete note in Markdown.
 ```
 
-For collection entries, `date` controls sorting, `period` is the displayed date text, and `category` selects a group under the archive key in `_data/content_groups.yml`. For post entries, the `YYYY-MM-DD` filename supplies the date, `key` selects the archive, and the first item in `categories` selects its group. `link` may be internal or external; omit it to use the generated detail page.
+Changing `permalink` changes the public URL without renaming the archive key or editing navigation URLs manually.
 
-To add a thumbnail to an entry in an archive using `cell: archive`:
+#### General archive entries
+
+Experiences, Notes, and Talks use the same general archive field names. The source folder changes where Jekyll loads the entry, but it does not change the cell schema:
 
 ```yaml
-thumbnail: "/images/example-thumbnail.jpg"
+---
+title: "Entry title"
+date: 2026-01-01
+key: notes                          # leave blank for a dedicated collection
+period:                             # optional display text
+category: "project"
+organization:
+summary: "One concise archive-row description."
+thumbnail:
+link:
+---
+
+## Optional detail content
+
+Write the complete detail page in Markdown.
 ```
 
-`thumbnail` accepts a site-relative path or a complete external URL. `image` is also accepted as an alias. When both fields are omitted, the same archive cell automatically uses the plain layout without reserving empty image space.
+Every general-cell Markdown file keeps these nine fields in the same order. Unused display fields may remain empty; Jekyll reads an empty YAML value as `nil`, and the Liquid cell either omits that element or uses its defined fallback.
 
-#### Create another archive page
+Only two source-specific rules remain:
 
-The included Talks page is an example of extending the same system without duplicating HTML.
+- collection entries such as files in `_experiences/` leave `key` empty, because their source already identifies the archive;
+- post entries provide `key`, because Notes and Talks share `_posts/`. Their filename must also use `YYYY-MM-DD-title.md`, and that filename date should match the explicit `date` field.
 
-1. Register the source, grouping mode, and archive-wide cell in `_data/content_archives.yml`:
+`title`, `date`, and `category` are required. All general entries use singular `category` and `summary`; there is no separate `categories`/`subtitle` compatibility schema. `period` overrides the displayed date, `category` selects a configured group, and `link` may be internal or external. Leave `link` empty to open the generated detail page.
 
-   ```yaml
-   talks:
-     source: "posts"
-     group_by: "category"
-     cell: "archive"
-   ```
+`thumbnail` accepts a site-relative path or a complete external URL. `image` is supported as an alias. Omitting both switches the same general archive cell to its plain layout without reserving empty image space.
 
-2. Define the ordered groups in `_data/content_groups.yml`:
+#### Publication entries use the same engine
 
-   ```yaml
-   talks:
-     - slug: "invited"
-       title: "Invited Talks"
-       label: "Invited"
-     - slug: "conference"
-       title: "Conference Talks"
-       label: "Conference"
-   ```
-
-3. Create the thin archive page `_pages/talks.md`:
-
-   ```yaml
-   ---
-   layout: signal-collection
-   title: "Talks"
-   description: "Talks and presentations."
-   intro: "A short archive introduction."
-   permalink: /talks/
-   key: talks
-   section_number: "04"
-   ---
-   ```
-
-4. Add dated posts whose front matter contains `key: talks` and a configured category such as `categories: [invited]`.
-5. To show the archive in the top menu, add its key and label to `_data/navigation.yml`:
-
-   ```yaml
-   - key: talks
-     label: "Talks"
-   ```
-
-From then on, adding one Markdown file automatically creates its row, category section, date, label, detail route, and return link.
-
-### 3. Publications
-
-Create one file per paper under `_publications/`, for example `_publications/2026-example-paper.md`:
+Publications is the `group_by: year` + `cell: publication` configuration shown above. Add one file per paper under `_publications/`:
 
 ```yaml
 ---
@@ -299,19 +306,34 @@ authors:
 Optional detail-page content can be written here in Markdown.
 ```
 
-The Publications page automatically:
+The shared archive layout automatically sorts these files by date, creates year sections, and creates category filter buttons. The publication cell then:
 
-- sorts papers by `date` in descending order;
-- creates year headings from `date`;
-- creates one filter button for every unique `category` used by the publication files;
-- filters rows by their `category`, so adding a new lowercase category such as `workshop` requires no page-template edit;
+- places `venue` at the left and `highlight` at the right of one metadata row;
 - emphasizes the author matching `primary_author`;
-- places `venue` at the left and `highlight` at the right of the metadata row;
+- uses `thumbnail_label` in the generated visual;
 - links the complete row to `paperurl`, or to the generated detail page when `paperurl` is omitted.
 
-Use lowercase, URL-safe values for `category` (for example, `conference`, `journal`, `preprint`, or `workshop`). The filter label is generated from that value, with hyphens converted to spaces. Publications uses the same `signal-collection` layout as the other archives, with `group_by: year` and `cell: publication`. Adding a paper or publication category requires only a new file in `_publications/`.
+Use lowercase, URL-safe categories such as `conference`, `journal`, `preprint`, or `workshop`. Adding a new category immediately adds its filter button; no page, layout, JavaScript, or YAML category list needs editing.
 
-### 4. CV
+#### Add a new archive page
+
+The included Talks page demonstrates the complete extension flow:
+
+1. Choose or register a content source in `_config.yml`. Reuse `posts` when separate Jekyll collection behavior is unnecessary.
+2. Register the archive in `_data/content_archives.yml` with one `key`, source, grouping mode, and cell.
+3. If it uses category grouping, add its ordered section labels to `_data/content_groups.yml`.
+4. Create `_pages/<key>.md` with `layout: signal-collection`, the same `key`, and any `permalink`.
+5. Add Markdown entries to the selected source.
+6. Optionally expose it in `_data/navigation.yml`:
+
+   ```yaml
+   - key: talks
+     label: "Talks"
+   ```
+
+After that, each new Markdown entry generates its archive row, group or year placement, category label or filter, destination, and detail-page return link.
+
+### 3. CV
 
 The CV is independent from `_data/profile.yml`. Edit `display_name`, `given_name`, `family_name`, and `summary` in `_pages/cv.md` for its header.
 

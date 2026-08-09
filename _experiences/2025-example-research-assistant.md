@@ -1,6 +1,7 @@
 ---
 title: "Research Assistant, Example Lab"
 date: 2025-01-01
+key:
 period: "2025 – Present"
 category: "research"
 organization: "Example University"

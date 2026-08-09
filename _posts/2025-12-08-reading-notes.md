@@ -1,9 +1,13 @@
 ---
-layout: single
 title: "Structuring Literature Review Notes"
-subtitle: "Use study records for bounded summaries, evidence, and follow-up questions"
+date: 2025-12-08
 key: notes
-categories: [study]
+period:
+category: "study"
+organization:
+summary: "Use study records for bounded summaries, evidence, and follow-up questions"
+thumbnail:
+link:
 ---
 
 ## Question

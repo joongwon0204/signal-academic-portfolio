@@ -1,9 +1,13 @@
 ---
-layout: single
 title: "A Checklist for Small Research Experiments"
-subtitle: "A compact study record for assumptions, baselines, metrics, and reproducibility"
+date: 2025-11-18
 key: notes
-categories: [study]
+period:
+category: "study"
+organization:
+summary: "A compact study record for assumptions, baselines, metrics, and reproducibility"
+thumbnail:
+link:
 ---
 
 ## Before the experiment

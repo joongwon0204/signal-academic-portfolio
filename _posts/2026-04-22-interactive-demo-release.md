@@ -1,9 +1,13 @@
 ---
-layout: single
 title: "Releasing an Interactive Research Demo"
-subtitle: "A project log covering scope, interface decisions, validation, and release notes"
+date: 2026-04-22
 key: notes
-categories: [project]
+period:
+category: "project"
+organization:
+summary: "A project log covering scope, interface decisions, validation, and release notes"
+thumbnail:
+link:
 ---
 
 ## Scope

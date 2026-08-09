@@ -1,9 +1,13 @@
 ---
-layout: single
 title: "Building a Reproducible Research Workflow"
-subtitle: "Use project logs to keep questions, experiments, and artifacts connected"
+date: 2026-01-15
 key: notes
-categories: [project]
+period:
+category: "project"
+organization:
+summary: "Use project logs to keep questions, experiments, and artifacts connected"
+thumbnail:
+link:
 ---
 
 ## Example workflow

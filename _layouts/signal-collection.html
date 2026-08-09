@@ -59,9 +59,6 @@ layout: signal
       <div class="signal-notes-index">
         {% for group in archive_groups %}
           {% assign group_items = archive_items | where: "category", group.slug %}
-          {% if archive_source == "posts" %}
-            {% assign group_items = archive_items | where_exp: "item", "item.categories contains group.slug" %}
-          {% endif %}
           {% if group_items.size > 0 %}
             <section class="signal-work-group signal-reveal" aria-labelledby="{{ group.slug }}-{{ content_key }}-title">
               <h2 class="signal-work-group__title" id="{{ group.slug }}-{{ content_key }}-title">{{ group.title }}</h2>

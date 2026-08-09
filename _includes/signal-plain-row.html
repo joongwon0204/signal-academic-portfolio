@@ -1,9 +1,17 @@
 {% assign item = include.item %}
-<a class="signal-experience-row" data-signal-archive-row data-signal-category="{{ include.category_slug | downcase | escape }}" href="{% if include.is_external_link %}{{ include.item_link }}{% else %}{{ include.item_link | relative_url }}{% endif %}"{% if include.is_external_link %} target="_blank" rel="noopener noreferrer"{% endif %}>
+{% assign thumbnail = item.thumbnail | default: item.image %}
+{% assign thumbnail_is_external = false %}
+{% if thumbnail contains '://' %}{% assign thumbnail_is_external = true %}{% endif %}
+<a class="signal-experience-row{% if thumbnail %} signal-experience-row--with-thumbnail{% endif %}" data-signal-archive-row data-signal-category="{{ include.category_slug | downcase | escape }}" href="{% if include.is_external_link %}{{ include.item_link }}{% else %}{{ include.item_link | relative_url }}{% endif %}"{% if include.is_external_link %} target="_blank" rel="noopener noreferrer"{% endif %}>
   {% if include.period_is_date %}
     <time class="signal-experience-row__period" datetime="{{ item.date | date_to_xmlschema }}">{{ include.period }}</time>
   {% else %}
     <span class="signal-experience-row__period">{{ include.period }}</span>
+  {% endif %}
+  {% if thumbnail %}
+    <span class="signal-experience-row__visual" aria-hidden="true">
+      <img src="{% if thumbnail_is_external %}{{ thumbnail }}{% else %}{{ thumbnail | relative_url }}{% endif %}" alt="" loading="lazy">
+    </span>
   {% endif %}
   <span class="signal-experience-row__content">
     {% if include.organization %}<span class="signal-experience-row__organization">{{ include.organization }}</span>{% endif %}

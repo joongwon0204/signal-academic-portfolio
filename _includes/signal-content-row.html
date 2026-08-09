@@ -6,7 +6,6 @@
   {% include signal-publication-row.html publication=item %}
 {% else %}
   {% assign category_slug = item.category %}
-  {% unless category_slug %}{% assign category_slug = item.categories | first %}{% endunless %}
   {% assign period = item.period %}
   {% assign period_is_date = false %}
   {% unless period %}
@@ -14,7 +13,7 @@
     {% assign period_is_date = true %}
   {% endunless %}
   {% assign organization = item.organization %}
-  {% assign summary = item.summary | default: item.subtitle %}
+  {% assign summary = item.summary %}
   {% assign item_link = item.link | default: item.url %}
   {% assign category_label = category_slug %}
   {% assign category_groups = site.data.content_groups[content_key] %}
@@ -24,10 +23,5 @@
   {% assign is_external_link = false %}
   {% if item_link contains '://' %}{% assign is_external_link = true %}{% endif %}
 
-  {% assign thumbnail = item.thumbnail | default: item.image %}
-  {% if thumbnail %}
-    {% include signal-thumbnail-row.html item=item period=period period_is_date=period_is_date organization=organization summary=summary item_link=item_link category_slug=category_slug category_label=category_label is_external_link=is_external_link %}
-  {% else %}
-    {% include signal-plain-row.html item=item period=period period_is_date=period_is_date organization=organization summary=summary item_link=item_link category_slug=category_slug category_label=category_label is_external_link=is_external_link %}
-  {% endif %}
+  {% include signal-plain-row.html item=item period=period period_is_date=period_is_date organization=organization summary=summary item_link=item_link category_slug=category_slug category_label=category_label is_external_link=is_external_link %}
 {% endif %}

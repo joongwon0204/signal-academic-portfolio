@@ -2,7 +2,7 @@
 layout: signal
 ---
 
-{% assign primary_category = page.categories | first %}
+{% assign primary_category = page.category %}
 {% assign is_note_article = false %}
 {% if page.collection == 'posts' %}
   {% assign is_note_article = true %}
@@ -18,7 +18,7 @@ layout: signal
       {% if page.date %}<time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%b %d, %Y' | upcase }}</time>{% endif %}
     </div>
     <h1 itemprop="headline">{{ page.title }}</h1>
-    {% if page.subtitle %}<p class="signal-article__subtitle">{{ page.subtitle }}</p>{% endif %}
+    {% if page.summary %}<p class="signal-article__subtitle">{{ page.summary }}</p>{% endif %}
     {% if page.read_time %}
       <p class="signal-article__reading">{% include read-time.html %}</p>
     {% endif %}

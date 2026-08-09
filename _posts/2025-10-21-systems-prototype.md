@@ -1,9 +1,13 @@
 ---
-layout: single
 title: "Documenting a Small Systems Prototype"
-subtitle: "Use project notes to connect a question, implementation, experiment, and result"
+date: 2025-10-21
 key: notes
-categories: [project]
+period:
+category: "project"
+organization:
+summary: "Use project notes to connect a question, implementation, experiment, and result"
+thumbnail:
+link:
 ---
 
 ## Purpose of this page

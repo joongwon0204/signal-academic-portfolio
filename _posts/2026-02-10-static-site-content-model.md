@@ -1,9 +1,13 @@
 ---
-layout: single
 title: "Adding a New Content Category"
-subtitle: "A short tutorial for extending the data-driven archive without duplicating HTML"
+date: 2026-02-10
 key: notes
-categories: [tutorial]
+period:
+category: "tutorial"
+organization:
+summary: "A short tutorial for extending the data-driven archive without duplicating HTML"
+thumbnail:
+link:
 ---
 
 ## 1. Define the category

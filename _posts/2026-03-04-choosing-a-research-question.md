@@ -1,9 +1,13 @@
 ---
-layout: single
 title: "From a Broad Topic to a Testable Question"
-subtitle: "A reflection on narrowing scope before implementation begins"
+date: 2026-03-04
 key: notes
-categories: [reflection]
+period:
+category: "reflection"
+organization:
+summary: "A reflection on narrowing scope before implementation begins"
+thumbnail:
+link:
 ---
 
 A portfolio note does not need to claim a finished result. It can document how a broad interest became a question with a measurable outcome, a realistic baseline, and a clear boundary.
