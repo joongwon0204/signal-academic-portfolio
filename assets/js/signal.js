@@ -219,6 +219,10 @@
     scheduleTimelineColors();
     window.addEventListener("resize", scheduleTimelineColors);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleTimelineColors);
+    if ("ResizeObserver" in window) {
+      var timelineResizeObserver = new ResizeObserver(scheduleTimelineColors);
+      timelineResizeObserver.observe(timeline);
+    }
   }
 
   var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

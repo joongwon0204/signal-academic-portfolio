@@ -1,0 +1,8 @@
+{% assign cell = include.cell %}
+<div class="signal-cv-entry">
+  <dl class="signal-detail-list">
+    {% for item in cell.items %}
+      <div><dt>{{ item.label }}</dt><dd>{{ item.value }}</dd></div>
+    {% endfor %}
+  </dl>
+</div>

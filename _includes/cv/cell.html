@@ -1,0 +1,6 @@
+{% assign cell = include.cell %}
+{% if cell.template == "pairs" %}
+  {% include cv/pairs.html cell=cell %}
+{% else %}
+  {% include cv/entry.html cell=cell %}
+{% endif %}

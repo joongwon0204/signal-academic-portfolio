@@ -1,0 +1,24 @@
+{% assign cell = include.cell %}
+{% assign is_external_link = false %}
+{% if cell.link contains "://" %}{% assign is_external_link = true %}{% endif %}
+
+<article class="signal-cv-entry">
+  {% if cell.heading or cell.period %}
+    <header class="signal-cv-entry__head">
+      {% if cell.heading %}
+        <h3>
+          {% if cell.link %}<a href="{% if is_external_link %}{{ cell.link }}{% else %}{{ cell.link | relative_url }}{% endif %}"{% if is_external_link %} target="_blank" rel="noopener noreferrer"{% endif %}>{% endif %}{{ cell.heading }}{% if cell.link %}</a>{% endif %}
+        </h3>
+      {% endif %}
+      {% if cell.period %}<p class="signal-cv-entry__date">{{ cell.period }}</p>{% endif %}
+    </header>
+  {% endif %}
+  {% if cell.subtitle %}<p class="signal-cv-entry__subtitle">{{ cell.subtitle }}</p>{% endif %}
+  {% if cell.facts %}
+    <div class="signal-cv-facts"{% if cell.facts_label %} aria-label="{{ cell.facts_label }}"{% endif %}>
+      {% for fact in cell.facts %}<div><span>{{ fact.label }}</span><strong>{{ fact.value }}</strong></div>{% endfor %}
+    </div>
+  {% endif %}
+  {% if cell.note %}<p class="signal-cv-entry__subtitle">{{ cell.note }}</p>{% endif %}
+  {% if cell.content != "" %}{{ cell.content | markdownify }}{% endif %}
+</article>

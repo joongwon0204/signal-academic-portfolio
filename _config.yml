@@ -167,6 +167,8 @@ kramdown:
   enable_coderay: false
 
 collections:
+  cv:
+    output: false
   experiences:
     output: true
     permalink: /experiences/:path/

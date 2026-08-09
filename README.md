@@ -70,10 +70,12 @@ Most visible content is generated from Markdown front matter and YAML data. Add 
 - `_config.yml`: site URL, repository, email, GitHub username, and downloadable CV path
 - `_publications/*.md`: one Markdown file per publication
 - `_experiences/*.md`: one Markdown file per experience, award, teaching role, or service activity
+- `_cv/*.md`: one Markdown file per CV cell
 - `_posts/*.md`: dated Notes, Talks, and other post-based archive entries
 - `_data/content_groups.yml`: group order, headings, and short category labels
 - `_data/content_archives.yml`: the content source and row style registered under each key
-- `_pages/*.md`: page title, introduction, key, permalink, and CV page structure
+- `_data/cv_sections.yml`: CV section order and headings
+- `_pages/*.md`: page title, introduction, key, permalink, and archive structure
 
 ### One shared `key`
 
@@ -286,14 +288,62 @@ The shared layout then creates the category sections, rows, dates, labels, and d
 
 ### 7. Edit the CV page and downloadable PDF
 
-The CV header name, summary, and research-interest list reuse `_data/profile.yml`. Edit the timeline sections directly in `_pages/cv.md`; duplicate or remove a `signal-timeline__section` block to change the visible CV structure.
+The CV is independent from `_data/profile.yml`. Edit `display_name`, `given_name`, `family_name`, and `summary` in `_pages/cv.md` for the CV header.
+
+Define section order and headings in `_data/cv_sections.yml`:
+
+```yaml
+- key: "education"
+  title: "Education"
+
+- key: "research-experience"
+  title: "Research Experience"
+```
+
+Create one file in `_cv/` for each visible cell. Two cell templates cover the supplied layout.
+
+Use `template: entry` for education, honors, interests, research experience, and projects:
+
+```yaml
+---
+section: education
+template: entry
+order: 10
+heading: "Example University"
+link: "https://example.edu/"
+period: "2022 – Present"
+subtitle: "B.S. in Computer Science"
+facts:
+  - label: "Expected"
+    value: "2027"
+---
+
+- Add optional details, links, or bullet points in Markdown.
+```
+
+Use `template: pairs` for coursework, skills, and other label-value lists:
+
+```yaml
+---
+section: skills
+template: pairs
+order: 10
+items:
+  - label: "Programming"
+    value: "Python, C++, JavaScript"
+  - label: "Tools"
+    value: "Git, Linux"
+---
+```
+
+Multiple cells may share one section. For example, create separate bachelor's and master's files with `section: education`. Cells are sorted by `order`; using `10`, `20`, and `30` leaves room to insert a new cell at `15` without renumbering the others. Cells in one section use compact whitespace instead of divider lines. Empty configured sections are omitted and the visible `01 /`, `02 /` numbers are generated automatically.
 
 Replace `assets/example-cv.pdf` with your own file and update `author.cv_pdf` in `_config.yml`. The file path controls the download button independently from the on-page CV content.
 
 ### 8. Replace images and example content
 
 - Replace `images/profile.png` or update `image.path` in `_data/profile.yml`.
-- Replace or delete the neutral files in `_publications/`, `_experiences/`, and `_posts/`.
+- Replace or delete the neutral files in `_publications/`, `_experiences/`, `_cv/`, and `_posts/`.
 - Keep category slugs synchronized with `_data/content_groups.yml`; an entry with an unknown category is not shown in a configured archive group.
 
 ### 9. Preserve an old URL after renaming a page
