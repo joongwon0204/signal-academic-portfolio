@@ -27,15 +27,15 @@ Publications are grouped by year and can be filtered by type without maintaining
 
 ![Full Signal Academic Portfolio publications page](images/screenshots/publications.png)
 
-### Experiences
+### Archive pages
 
-Experiences use the same row system as other archives and are grouped from Markdown categories.
+Experiences and Notes demonstrate the same shared archive design: Markdown entries are grouped by category, rendered as consistent rows, and connected to generated detail pages. They use different content sources, but they are not separate page components.
+
+**Experiences archive**
 
 ![Full Signal Academic Portfolio experiences page](images/screenshots/experiences.png)
 
-### Notes
-
-Notes demonstrate a post-based archive with multiple categories and generated detail pages.
+**Notes archive**
 
 ![Full Signal Academic Portfolio notes page](images/screenshots/notes.png)
 
@@ -67,11 +67,9 @@ The CV is assembled from ordered Markdown cells and keeps its timeline, section 
 4. Replace the neutral example Markdown and image files described below.
 5. In **Settings → Pages**, select **GitHub Actions** as the source.
 
-The template has three content workflows: Home and dynamic archives, Publications, and CV. Adding an entry to any of them does not require copying page HTML.
+The template has four content workflows: Main page, shared archive pages, Publications, and CV. Adding an entry to any of them does not require copying page HTML.
 
-### 1. Main page and dynamic archive pages
-
-#### Edit the Home page
+### 1. Main page
 
 Use `_data/profile.yml` for the visible profile and research-interest content:
 
@@ -107,9 +105,9 @@ The supplied research diagram has three fixed node positions. Replace the labels
 
 The Home page automatically shows the newest entries from the Experiences and Notes archives. Adding or reordering archive content therefore updates both its archive page and the Home preview.
 
-#### How a dynamic archive works
+### 2. Archive pages
 
-Experiences, Notes, and Talks use one shared archive layout. Each archive is connected by a unique `key`:
+Experiences and Notes are two configured instances of the same `signal-collection` archive layout. Talks demonstrates that the same component can be reused for another content page. Each archive is connected by one unique `key`:
 
 1. `_pages/<key>.md` defines the page title, introduction, canonical URL, and `key`.
 2. `_data/content_archives.yml` tells the shared layout where entries come from.
@@ -119,9 +117,16 @@ Experiences, Notes, and Talks use one shared archive layout. Each archive is con
 
 The page permalink remains independent. Navigation, active states, and detail-page return links resolve the page through `key`, so changing `/notes/` to `/writing/` requires changing only the page permalink.
 
-#### Add an Experience
+#### Add content to an archive
 
-Create one file under `_experiences/`:
+Every entry becomes a row in its configured category group. The source registered in `_data/content_archives.yml` determines where its Markdown files live:
+
+- collection-backed archives such as Experiences read files from `_experiences/`;
+- post-backed archives such as Notes and Talks read dated files from `_posts/` and select entries by `key`.
+
+Both formats participate in the same grouping, sorting, row interaction, detail-page, and return-link system:
+
+Collection-backed entry:
 
 ```yaml
 ---
@@ -137,11 +142,7 @@ link: "https://example.com/project"
 Optional detail-page content can be written here in Markdown.
 ```
 
-`date` controls sorting, while `period` is the date text displayed in the row. `category` selects a group configured under `experiences` in `_data/content_groups.yml`. `link` may be internal or external; omit it to use the generated detail page.
-
-#### Add a Note
-
-Create a dated post such as `_posts/2026-01-15-research-workflow.md`:
+Post-backed entry:
 
 ```yaml
 ---
@@ -157,9 +158,9 @@ categories: [project]
 Write the complete note in Markdown.
 ```
 
-The `YYYY-MM-DD` filename supplies the date unless front matter overrides it. `key: notes` sends the post to the Notes page, and the first category selects its configured group. The archive row and detail-page return link are generated automatically.
+For collection entries, `date` controls sorting, `period` is the displayed date text, and `category` selects a group under the archive key in `_data/content_groups.yml`. For post entries, the `YYYY-MM-DD` filename supplies the date, `key` selects the archive, and the first item in `categories` selects its group. `link` may be internal or external; omit it to use the generated detail page.
 
-#### Add another archive page
+#### Create another archive page
 
 The included Talks page is an example of extending the same system without duplicating HTML.
 
@@ -207,7 +208,7 @@ The included Talks page is an example of extending the same system without dupli
 
 From then on, adding one Markdown file automatically creates its row, category section, date, label, detail route, and return link.
 
-### 2. Publications
+### 3. Publications
 
 Create one file per paper under `_publications/`, for example `_publications/2026-example-paper.md`:
 
@@ -241,7 +242,7 @@ The Publications page automatically:
 
 Edit `_pages/publications.md` only when changing the archive title or introduction. Adding a paper requires only a new file in `_publications/`.
 
-### 3. CV
+### 4. CV
 
 The CV is independent from `_data/profile.yml`. Edit `display_name`, `given_name`, `family_name`, and `summary` in `_pages/cv.md` for its header.
 
