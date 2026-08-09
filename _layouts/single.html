@@ -16,8 +16,16 @@ layout: signal
   {% assign archive_url = '/experiences/' %}
   {% assign archive_label = 'Back to experiences' %}
 {% endif %}
-{% if page.back_url %}{% assign archive_url = page.back_url %}{% endif %}
-{% if page.back_label %}{% assign archive_label = page.back_label %}{% endif %}
+{% if page.archive_path %}
+  {% assign archive_url = page.archive_path %}
+{% elsif page.back_url %}
+  {% assign archive_url = page.back_url %}
+{% endif %}
+{% if page.archive_label %}
+  {% assign archive_label = page.archive_label %}
+{% elsif page.back_label %}
+  {% assign archive_label = page.back_label %}
+{% endif %}
 <article class="signal-shell signal-article{% if is_note_article %} signal-article--note{% endif %}" itemscope itemtype="https://schema.org/Article">
   <header class="signal-article__head signal-reveal">
     <div class="signal-article__meta">

@@ -2,6 +2,7 @@
 layout: single
 title: "Building a Reproducible Research Workflow"
 subtitle: "Use project logs to keep questions, experiments, and artifacts connected"
+page_key: notes
 categories: [project]
 ---
 

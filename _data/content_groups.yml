@@ -25,3 +25,11 @@ notes:
   - slug: "reflection"
     title: "Research Reflections"
     label: "Reflection"
+
+talks:
+  - slug: "invited"
+    title: "Invited Talks"
+    label: "Invited"
+  - slug: "conference"
+    title: "Conference Talks"
+    label: "Conference"

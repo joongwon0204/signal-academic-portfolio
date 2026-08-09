@@ -1,5 +1,6 @@
 {% assign item = include.item %}
 {% assign content_kind = include.kind | default: 'note' %}
+{% assign category_group_key = include.group_key %}
 {% assign organization = nil %}
 
 {% if content_kind == 'experience' %}
@@ -8,14 +9,16 @@
   {% assign organization = item.organization %}
   {% assign summary = item.summary %}
   {% assign item_link = item.link | default: item.url %}
-  {% assign category_groups = site.data.content_groups.experiences %}
+  {% unless category_group_key %}{% assign category_group_key = 'experiences' %}{% endunless %}
 {% else %}
   {% assign category_slug = item.categories | first %}
   {% assign period = item.date | date: "%b %d, %Y" | upcase %}
   {% assign summary = item.subtitle %}
   {% assign item_link = item.link | default: item.url %}
-  {% assign category_groups = site.data.content_groups.notes %}
+  {% unless category_group_key %}{% assign category_group_key = 'notes' %}{% endunless %}
 {% endif %}
+
+{% assign category_groups = site.data.content_groups[category_group_key] %}
 
 {% assign category_label = category_slug %}
 {% for category_group in category_groups %}

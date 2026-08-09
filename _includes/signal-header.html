@@ -8,7 +8,9 @@
 {% if page.url == '/experiences/' or page.collection == 'experiences' %}
   {% assign is_experiences = true %}
 {% endif %}
-{% if page.url == '/notes/' or page.collection == 'posts' %}
+{% if page.url == '/notes/' %}
+  {% assign is_notes = true %}
+{% elsif page.collection == 'posts' and page.page_key == 'notes' %}
   {% assign is_notes = true %}
 {% endif %}
 

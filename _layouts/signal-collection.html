@@ -1,0 +1,49 @@
+---
+layout: signal
+---
+
+{% assign archive_page_key = page.page_key | default: page.group_key %}
+{% assign archive_group_key = page.group_key | default: archive_page_key %}
+{% assign archive_groups = site.data.content_groups[archive_group_key] %}
+{% assign archive_source = page.source | default: "posts" %}
+{% assign archive_row_kind = page.row_kind | default: "note" %}
+{% assign archive_intro = page.intro | default: page.description %}
+
+<section class="signal-shell signal-index">
+  <header class="signal-index-head signal-reveal">
+    <div class="signal-index-head__copy">
+      {% if page.section_number %}<p class="signal-kicker">{{ page.section_number }} / {{ page.title | upcase }}</p>{% endif %}
+      <h1>{{ page.title }}</h1>
+      {% if archive_intro %}<p class="signal-index-head__intro">{{ archive_intro }}</p>{% endif %}
+    </div>
+    {% include signal-circuit.html class="signal-index-head__circuit" %}
+  </header>
+
+  {% if archive_source == "experiences" %}
+    <div class="signal-work-index signal-reveal">
+  {% else %}
+    <div class="signal-notes-index">
+  {% endif %}
+    {% for group in archive_groups %}
+      {% assign group_items = "" | split: "" %}
+      {% if archive_source == "experiences" %}
+        {% assign group_items = site.experiences | where: "category", group.slug | sort: "date" | reverse %}
+      {% else %}
+        {% assign category_items = site.categories[group.slug] %}
+        {% if category_items %}
+          {% assign group_items = category_items | where: "page_key", archive_page_key | sort: "date" | reverse %}
+        {% endif %}
+      {% endif %}
+      {% if group_items.size > 0 %}
+        <section class="signal-work-group{% unless archive_source == 'experiences' %} signal-reveal{% endunless %}" aria-labelledby="{{ group.slug }}-{{ archive_page_key }}-title">
+          <h2 class="signal-work-group__title" id="{{ group.slug }}-{{ archive_page_key }}-title">{{ group.title }}</h2>
+          <div class="{% if archive_source == 'experiences' %}signal-experience-list signal-experience-list--archive{% else %}signal-note-list{% endif %}">
+            {% for item in group_items %}
+              {% include signal-content-row.html item=item kind=archive_row_kind group_key=archive_group_key %}
+            {% endfor %}
+          </div>
+        </section>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
