@@ -3,6 +3,10 @@ layout: compress
 ---
 
 {% include base_path %}
+{% assign signal_body_modifier = page.layout | default: 'page' %}
+{% if signal_body_modifier == 'signal-collection' %}
+  {% assign signal_body_modifier = 'signal' %}
+{% endif %}
 
 <!doctype html>
 <html lang="{{ site.locale | slice: 0,2 | default: 'en' }}" class="no-js">
@@ -11,7 +15,7 @@ layout: compress
     {% include head/custom.html %}
     <link rel="stylesheet" href="{{ '/assets/css/signal.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   </head>
-  <body class="signal-site signal-site--{{ page.layout | default: 'page' }}">
+  <body class="signal-site signal-site--{{ signal_body_modifier }}">
     <a class="signal-skip" href="#signal-main">Skip to content</a>
     {% include signal-header.html %}
 
