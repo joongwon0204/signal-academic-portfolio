@@ -1,10 +1,39 @@
-# Signal Academic Portfolio
+<h1 align="center">Signal Academic Portfolio</h1>
 
-Signal Academic Portfolio is a light, interactive Jekyll template for researchers, students, and engineers. It combines an editorial academic layout with violet, blue, and cyan circuit accents, while keeping the visible content editable through Markdown and YAML.
+<p align="center">
+  A light, interactive, data-driven Jekyll portfolio for researchers, students, and engineers.
+</p>
+
+<p align="center">
+  <a href="https://joongwon0204.github.io/signal-academic-portfolio/"><img alt="Live Demo" src="https://img.shields.io/badge/Live_Demo-Open_site-0799a8?style=for-the-badge"></a>
+  <a href="https://github.com/joongwon0204/signal-academic-portfolio/generate"><img alt="Use This Template" src="https://img.shields.io/badge/Use_This_Template-Create_repository-6655ff?style=for-the-badge&logo=github"></a>
+  <a href="https://github.com/joongwon0204/signal-academic-portfolio/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/v/release/joongwon0204/signal-academic-portfolio?style=for-the-badge&color=2f6fed"></a>
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/github/license/joongwon0204/signal-academic-portfolio?style=for-the-badge&color=4d596c"></a>
+</p>
+
+<p align="center">
+  <a href="https://joongwon0204.github.io/signal-academic-portfolio/">
+    <img src="images/social-preview.png" alt="Signal Academic Portfolio preview" width="960">
+  </a>
+</p>
+
+Signal Academic Portfolio combines an editorial academic layout with violet, blue, and cyan circuit accents. Visible content stays editable through Markdown and YAML, while the shared rendering engine keeps archive pages, publication lists, responsive interactions, and the CV consistent.
+
+- **Markdown-first content** — update publications, experiences, notes, and CV entries without duplicating page HTML.
+- **Reusable archive engine** — group entries by category or year and select a consistent adaptive cell for each archive.
+- **Responsive academic UI** — retain the same interaction language across desktop, tablet, and mobile layouts.
 
 Every person, institution, lab, project, and publication included in this repository is neutral example content. Replace the examples before publishing your own site.
 
-example site : https://joongwon0204.github.io/signal-academic-portfolio/
+## Quick start
+
+1. Click **[Use this template](https://github.com/joongwon0204/signal-academic-portfolio/generate)** and create a new repository.
+2. Set the deployment URL, repository name, and contact fields in `_config.yml`.
+3. Replace `_data/profile.yml`, the example Markdown entries, and `images/profile.png`.
+4. In **Settings → Pages**, select **GitHub Actions** as the source.
+5. Push to the configured branch and open the generated site after the Pages workflow finishes.
+
+For a working reference, open the **[live demo](https://joongwon0204.github.io/signal-academic-portfolio/)**. The detailed file map and content schemas are documented in [How to use](#how-to-use).
 
 ## Design
 
