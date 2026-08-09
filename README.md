@@ -73,6 +73,20 @@ author:
 
 The home-page cells and archive pages are generated from those sources. Adding content normally does not require copying or editing HTML.
 
+### Preserve an old URL after renaming a page
+
+`permalink` is the page's current canonical URL. Add `redirect_from` only when a previously published URL must continue working after a migration:
+
+```yaml
+---
+permalink: /experiences/
+redirect_from:
+  - /old-experiences/
+---
+```
+
+Do not list the current permalink under `redirect_from`. Fresh template installations do not need redirects, so this repository does not include site-specific legacy paths by default.
+
 ### Add an experience
 
 ```yaml

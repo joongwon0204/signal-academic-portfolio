@@ -3,9 +3,6 @@ layout: signal
 title: "CV"
 description: "Example curriculum vitae sections for the Signal Academic Portfolio template."
 permalink: /cv/
-redirect_from:
-  - /resume
-  - /resume/
 ---
 
 {% assign profile = site.data.profile %}

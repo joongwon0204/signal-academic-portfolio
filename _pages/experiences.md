@@ -6,6 +6,4 @@ intro: "Add independent Markdown entries and organize them with categories defin
 permalink: /experiences/
 archive_key: experiences
 section_number: "02"
-redirect_from:
-  - /projects/
 ---

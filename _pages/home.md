@@ -3,9 +3,6 @@ layout: signal
 permalink: /
 title: "Home"
 description: "A neutral demonstration of the Signal Academic Portfolio template."
-redirect_from:
-  - /about/
-  - /about.html
 ---
 
 {% assign profile = site.data.profile %}

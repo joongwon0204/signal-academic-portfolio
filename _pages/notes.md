@@ -6,7 +6,4 @@ intro: "Create dated posts for project logs, study records, or any additional wr
 permalink: /notes/
 archive_key: notes
 section_number: "03"
-redirect_from:
-  - /year-archive/
-  - /wordpress/blog-posts/
 ---
