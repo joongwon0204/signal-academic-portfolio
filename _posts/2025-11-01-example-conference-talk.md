@@ -2,7 +2,7 @@
 layout: single
 title: "Example Conference Talk"
 date: 2025-11-01
-page_key: talks
+archive_key: talks
 categories: [conference]
 subtitle: "A second neutral entry used to verify category ordering."
 archive_path: /talks/

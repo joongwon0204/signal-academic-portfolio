@@ -62,7 +62,8 @@ author:
 ## What to edit
 
 - `_data/profile.yml`: display name, introduction, hero artwork, and three research-interest labels
-- `_data/content_groups.yml`: category slugs, labels, and group headings for Experiences and Notes
+- `_data/content_archives.yml`: one central source and row-style mapping for each archive key
+- `_data/content_groups.yml`: category slugs, labels, and group headings for Experiences, Notes, and custom archives
 - `_experiences/*.md`: one Markdown file per experience, award, or other milestone
 - `_posts/*.md`: one dated Markdown file per project log or study note
 - `_publications/*.md`: one Markdown file per publication
@@ -97,11 +98,14 @@ Create a dated file under `_posts/`:
 layout: single
 title: "A Reproducible Research Workflow"
 subtitle: "A short description shown in the archive cell"
+archive_key: notes
 categories: [project]
 ---
 ```
 
 The first category selects the group and label defined under `notes` in `_data/content_groups.yml`. The included examples cover project logs, study records, tutorials, and research reflections.
+
+Archive pages themselves use one routing field only. For example, `_pages/notes.md` contains `archive_key: notes`; the shared layout gets its source and row style from `_data/content_archives.yml` and its ordered groups from `_data/content_groups.yml`. The included `_pages/talks.md` and talk posts show the same pattern for an additional archive.
 
 ### Add a publication
 

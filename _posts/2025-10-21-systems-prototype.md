@@ -2,7 +2,7 @@
 layout: single
 title: "Documenting a Small Systems Prototype"
 subtitle: "Use project notes to connect a question, implementation, experiment, and result"
-page_key: notes
+archive_key: notes
 categories: [project]
 ---
 

@@ -2,7 +2,7 @@
 layout: single
 title: "Example Invited Talk"
 date: 2026-06-01
-page_key: talks
+archive_key: talks
 categories: [invited]
 subtitle: "A neutral entry used to verify the reusable collection layout."
 archive_path: /talks/

@@ -2,7 +2,7 @@
 layout: single
 title: "A Checklist for Small Research Experiments"
 subtitle: "A compact study record for assumptions, baselines, metrics, and reproducibility"
-page_key: notes
+archive_key: notes
 categories: [study]
 ---
 

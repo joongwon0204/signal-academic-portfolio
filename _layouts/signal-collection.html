@@ -2,11 +2,11 @@
 layout: signal
 ---
 
-{% assign archive_page_key = page.page_key | default: page.group_key %}
-{% assign archive_group_key = page.group_key | default: archive_page_key %}
-{% assign archive_groups = site.data.content_groups[archive_group_key] %}
-{% assign archive_source = page.source | default: "posts" %}
-{% assign archive_row_kind = page.row_kind | default: "note" %}
+{% assign archive_key = page.archive_key %}
+{% assign archive_config = site.data.content_archives[archive_key] %}
+{% assign archive_groups = site.data.content_groups[archive_key] %}
+{% assign archive_source = archive_config.source | default: "posts" %}
+{% assign archive_row_kind = archive_config.row_kind | default: "note" %}
 {% assign archive_intro = page.intro | default: page.description %}
 
 <section class="signal-shell signal-index">
@@ -31,15 +31,15 @@ layout: signal
       {% else %}
         {% assign category_items = site.categories[group.slug] %}
         {% if category_items %}
-          {% assign group_items = category_items | where: "page_key", archive_page_key | sort: "date" | reverse %}
+          {% assign group_items = category_items | where: "archive_key", archive_key | sort: "date" | reverse %}
         {% endif %}
       {% endif %}
       {% if group_items.size > 0 %}
-        <section class="signal-work-group{% unless archive_source == 'experiences' %} signal-reveal{% endunless %}" aria-labelledby="{{ group.slug }}-{{ archive_page_key }}-title">
-          <h2 class="signal-work-group__title" id="{{ group.slug }}-{{ archive_page_key }}-title">{{ group.title }}</h2>
+        <section class="signal-work-group{% unless archive_source == 'experiences' %} signal-reveal{% endunless %}" aria-labelledby="{{ group.slug }}-{{ archive_key }}-title">
+          <h2 class="signal-work-group__title" id="{{ group.slug }}-{{ archive_key }}-title">{{ group.title }}</h2>
           <div class="{% if archive_source == 'experiences' %}signal-experience-list signal-experience-list--archive{% else %}signal-note-list{% endif %}">
             {% for item in group_items %}
-              {% include signal-content-row.html item=item kind=archive_row_kind group_key=archive_group_key %}
+              {% include signal-content-row.html item=item kind=archive_row_kind archive_key=archive_key %}
             {% endfor %}
           </div>
         </section>

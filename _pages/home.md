@@ -119,7 +119,7 @@ redirect_from:
     </header>
 
     <div class="signal-note-list">
-      {% assign notes_posts = site.posts | where: "page_key", "notes" %}
+      {% assign notes_posts = site.posts | where: "archive_key", "notes" %}
       {% for post in notes_posts limit:3 %}
         {% include signal-content-row.html item=post kind="note" %}
       {% endfor %}

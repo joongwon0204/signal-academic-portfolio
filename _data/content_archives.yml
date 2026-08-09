@@ -1,0 +1,11 @@
+experiences:
+  source: "experiences"
+  row_kind: "experience"
+
+notes:
+  source: "posts"
+  row_kind: "note"
+
+talks:
+  source: "posts"
+  row_kind: "note"
