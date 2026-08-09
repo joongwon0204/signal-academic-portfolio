@@ -2,7 +2,7 @@
 layout: single
 title: "Conference Paper Example: Showing a Long Author List and Featured Note"
 date: 2025-11-03
-type: "conference"
+category: "conference"
 venue: "International Conference on Example Computing Systems"
 paperurl: "https://example.com/papers/conference"
 highlight: "Oral presentation - example metadata only"

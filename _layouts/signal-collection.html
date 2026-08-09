@@ -5,9 +5,17 @@ layout: signal
 {% assign content_key = page.key %}
 {% assign archive_config = site.data.content_archives[content_key] %}
 {% assign archive_groups = site.data.content_groups[content_key] %}
-{% assign archive_source = archive_config.source | default: "posts" %}
-{% assign archive_row_kind = archive_config.row_kind | default: "note" %}
+{% assign archive_source = archive_config.source | default: content_key %}
+{% assign archive_group_by = archive_config.group_by | default: "category" %}
+{% assign archive_cell = archive_config.cell | default: "archive" %}
 {% assign archive_intro = page.intro | default: page.description %}
+{% assign archive_items = "" | split: "" %}
+
+{% if archive_source == "posts" %}
+  {% assign archive_items = site.posts | where: "key", content_key | sort: "date" | reverse %}
+{% else %}
+  {% assign archive_items = site[archive_source] | sort: "date" | reverse %}
+{% endif %}
 
 <section class="signal-shell signal-index">
   <header class="signal-index-head signal-reveal">
@@ -19,31 +27,62 @@ layout: signal
     {% include signal-circuit.html class="signal-index-head__circuit" %}
   </header>
 
-  {% if archive_source == "experiences" %}
-    <div class="signal-work-index signal-reveal">
-  {% else %}
-    <div class="signal-notes-index">
-  {% endif %}
-    {% for group in archive_groups %}
-      {% assign group_items = "" | split: "" %}
-      {% if archive_source == "experiences" %}
-        {% assign group_items = site.experiences | where: "category", group.slug | sort: "date" | reverse %}
-      {% else %}
-        {% assign category_items = site.categories[group.slug] %}
-        {% if category_items %}
-          {% assign group_items = category_items | where: "key", content_key | sort: "date" | reverse %}
-        {% endif %}
-      {% endif %}
-      {% if group_items.size > 0 %}
-        <section class="signal-work-group{% unless archive_source == 'experiences' %} signal-reveal{% endunless %}" aria-labelledby="{{ group.slug }}-{{ content_key }}-title">
-          <h2 class="signal-work-group__title" id="{{ group.slug }}-{{ content_key }}-title">{{ group.title }}</h2>
-          <div class="{% if archive_source == 'experiences' %}signal-experience-list signal-experience-list--archive{% else %}signal-note-list{% endif %}">
-            {% for item in group_items %}
-              {% include signal-content-row.html item=item kind=archive_row_kind key=content_key %}
+  {% if archive_items.size > 0 %}
+    {% if archive_group_by == "year" %}
+      {% assign archive_categories = archive_items | map: "category" | compact | uniq | sort %}
+      <div class="signal-publications signal-reveal">
+        {% if archive_categories.size > 0 %}
+          <div class="signal-filter-line" data-signal-filter-group data-signal-filter-target="[data-signal-archive-row]" role="group" aria-label="{{ page.title | escape }} categories">
+            <button type="button" data-signal-filter="all" aria-pressed="true">ALL</button>
+            {% for archive_category in archive_categories %}
+              {% assign archive_category_key = archive_category | downcase %}
+              <button type="button" data-signal-filter="{{ archive_category_key | escape }}" aria-pressed="false">{{ archive_category | replace: "-", " " | upcase }}</button>
             {% endfor %}
           </div>
-        </section>
-      {% endif %}
-    {% endfor %}
-  </div>
+        {% endif %}
+
+        {% assign current_year = "" %}
+        {% for item in archive_items %}
+          {% assign item_year = item.date | date: "%Y" %}
+          {% if item_year != current_year %}
+            {% unless forloop.first %}</div></section>{% endunless %}
+            <section class="signal-publication-year" data-signal-filter-section aria-labelledby="{{ content_key }}-{{ item_year }}-title">
+              <header class="signal-publication-year__head"><h2 id="{{ content_key }}-{{ item_year }}-title">{{ item_year }}</h2></header>
+              <div class="signal-publication-year__list">
+            {% assign current_year = item_year %}
+          {% endif %}
+          {% include signal-content-row.html item=item cell=archive_cell key=content_key %}
+          {% if forloop.last %}</div></section>{% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="signal-notes-index">
+        {% for group in archive_groups %}
+          {% assign group_items = archive_items | where: "category", group.slug %}
+          {% if archive_source == "posts" %}
+            {% assign group_items = archive_items | where_exp: "item", "item.categories contains group.slug" %}
+          {% endif %}
+          {% if group_items.size > 0 %}
+            <section class="signal-work-group signal-reveal" aria-labelledby="{{ group.slug }}-{{ content_key }}-title">
+              <h2 class="signal-work-group__title" id="{{ group.slug }}-{{ content_key }}-title">{{ group.title }}</h2>
+              <div class="signal-note-list">
+                {% for item in group_items %}
+                  {% include signal-content-row.html item=item cell=archive_cell key=content_key %}
+                {% endfor %}
+              </div>
+            </section>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="signal-empty signal-reveal">
+      <div class="signal-empty__copy">
+        <span class="signal-empty__index">00 / NO ENTRIES</span>
+        <h2>No entries yet.</h2>
+        <p>Add Markdown entries to the source configured for this archive.</p>
+      </div>
+      {% include signal-circuit.html class="signal-empty__circuit" %}
+    </div>
+  {% endif %}
 </section>

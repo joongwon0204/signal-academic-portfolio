@@ -23,7 +23,7 @@ The Home page combines a profile hero, an interactive three-node research-intere
 
 ### Publications
 
-Publications are grouped by year and can be filtered by type without maintaining separate HTML sections.
+Publications use the shared archive generator in year-grouping mode. Their category filters are generated directly from publication Markdown without maintaining separate HTML sections.
 
 ![Full Signal Academic Portfolio publications page](images/screenshots/publications.png)
 
@@ -67,7 +67,7 @@ The CV is assembled from ordered Markdown cells and keeps its timeline, section 
 4. Replace the neutral example Markdown and image files described below.
 5. In **Settings → Pages**, select **GitHub Actions** as the source.
 
-The template has four content workflows: Main page, shared archive pages, Publications, and CV. Adding an entry to any of them does not require copying page HTML.
+The template has three content workflows: Main page, shared archive pages, and CV. Publications, Experiences, Notes, and Talks are configured instances of the same archive generator.
 
 ### 0. File structure and generation mechanism
 
@@ -79,7 +79,7 @@ The repository separates content, page configuration, rendering, and presentatio
 ├── _data/
 │   ├── profile.yml              # Home profile and research-interest content
 │   ├── navigation.yml           # Top-menu order and labels
-│   ├── content_archives.yml     # Archive key → content source and row kind
+│   ├── content_archives.yml     # Archive key → source, grouping mode, and cell style
 │   ├── content_groups.yml       # Archive category order, headings, and labels
 │   └── cv_sections.yml          # CV section order and headings
 ├── _pages/                      # Thin page definitions, keys, titles, and permalinks
@@ -88,7 +88,7 @@ The repository separates content, page configuration, rendering, and presentatio
 ├── _publications/               # One Markdown file per publication
 ├── _cv/                         # One Markdown file per CV cell
 ├── _layouts/                    # Shared page shells and archive-generation logic
-├── _includes/                   # Reusable rows, header, footer, CV cells, and graphics
+├── _includes/                   # Three archive cells, header, footer, CV cells, and graphics
 ├── assets/
 │   ├── css/signal.scss          # Responsive visual system
 │   └── js/signal.js             # Filters, hover states, navigation, and interactions
@@ -145,19 +145,40 @@ The Home page automatically shows the newest entries from the Experiences and No
 
 ### 2. Archive pages
 
-Experiences and Notes are two configured instances of the same `signal-collection` archive layout. Talks demonstrates that the same component can be reused for another content page. Each archive is connected by one unique `key`:
+Publications, Experiences, Notes, and Talks are configured instances of the same `signal-collection` archive layout. Each archive is connected by one unique `key`:
 
 1. `_pages/<key>.md` defines the page title, introduction, canonical URL, and `key`.
-2. `_data/content_archives.yml` tells the shared layout where entries come from.
-3. `_data/content_groups.yml` defines category order, section headings, and row labels.
+2. `_data/content_archives.yml` selects the content source, grouping mode, and one cell component for the whole archive.
+3. For category-grouped archives, `_data/content_groups.yml` defines category order, section headings, and row labels.
 4. Markdown entries provide their date, category, title, summary, and optional destination URL.
 5. `_data/navigation.yml` optionally exposes the page in the top menu using the same `key`.
 
 The page permalink remains independent. Navigation, active states, and detail-page return links resolve the page through `key`, so changing `/notes/` to `/writing/` requires changing only the page permalink.
 
+The archive generator supports two grouping modes and two archive-level cell components:
+
+```yaml
+publications:
+  source: "publications"
+  group_by: "year"
+  cell: "publication"
+
+experiences:
+  source: "experiences"
+  group_by: "category"
+  cell: "archive"
+```
+
+- `group_by: year` creates year headings and automatically adds filter buttons from the entries' unique `category` values.
+- `group_by: category` creates the category sections defined in `_data/content_groups.yml` and does not display filter buttons.
+- `cell: publication` renders paper metadata, authors, and the publication visual.
+- `cell: archive` renders the shared Experiences/Notes-style row. It automatically shows the thumbnail layout when an entry has `thumbnail` or `image`; otherwise it renders the plain layout.
+
+The configured `cell` applies to every entry in that archive. Individual Markdown files cannot override it, which keeps each archive visually consistent while the shared `archive` component handles optional thumbnails internally.
+
 #### Add content to an archive
 
-Every entry becomes a row in its configured category group. The source registered in `_data/content_archives.yml` determines where its Markdown files live:
+Every entry becomes a row under the configured year or category group. The source registered in `_data/content_archives.yml` determines where its Markdown files live:
 
 - collection-backed archives such as Experiences read files from `_experiences/`;
 - post-backed archives such as Notes and Talks read dated files from `_posts/` and select entries by `key`.
@@ -198,16 +219,25 @@ Write the complete note in Markdown.
 
 For collection entries, `date` controls sorting, `period` is the displayed date text, and `category` selects a group under the archive key in `_data/content_groups.yml`. For post entries, the `YYYY-MM-DD` filename supplies the date, `key` selects the archive, and the first item in `categories` selects its group. `link` may be internal or external; omit it to use the generated detail page.
 
+To add a thumbnail to an entry in an archive using `cell: archive`:
+
+```yaml
+thumbnail: "/images/example-thumbnail.jpg"
+```
+
+`thumbnail` accepts a site-relative path or a complete external URL. `image` is also accepted as an alias. When both fields are omitted, the same archive cell automatically uses the plain layout without reserving empty image space.
+
 #### Create another archive page
 
 The included Talks page is an example of extending the same system without duplicating HTML.
 
-1. Register the source and row style in `_data/content_archives.yml`:
+1. Register the source, grouping mode, and archive-wide cell in `_data/content_archives.yml`:
 
    ```yaml
    talks:
      source: "posts"
-     row_kind: "note"
+     group_by: "category"
+     cell: "archive"
    ```
 
 2. Define the ordered groups in `_data/content_groups.yml`:
@@ -255,7 +285,7 @@ Create one file per paper under `_publications/`, for example `_publications/202
 layout: single
 title: "Your Paper Title"
 date: 2026-01-01
-type: "conference"
+category: "conference"
 venue: "Conference or Journal"
 paperurl: "https://example.com/paper"
 highlight: "Optional oral, spotlight, award, or featured-paper note"
@@ -273,12 +303,13 @@ The Publications page automatically:
 
 - sorts papers by `date` in descending order;
 - creates year headings from `date`;
-- filters rows by `type: conference`, `journal`, or `preprint`;
+- creates one filter button for every unique `category` used by the publication files;
+- filters rows by their `category`, so adding a new lowercase category such as `workshop` requires no page-template edit;
 - emphasizes the author matching `primary_author`;
 - places `venue` at the left and `highlight` at the right of the metadata row;
 - links the complete row to `paperurl`, or to the generated detail page when `paperurl` is omitted.
 
-Edit `_pages/publications.md` only when changing the archive title or introduction. Adding a paper requires only a new file in `_publications/`.
+Use lowercase, URL-safe values for `category` (for example, `conference`, `journal`, `preprint`, or `workshop`). The filter label is generated from that value, with hyphens converted to spaces. Publications uses the same `signal-collection` layout as the other archives, with `group_by: year` and `cell: publication`. Adding a paper or publication category requires only a new file in `_publications/`.
 
 ### 4. CV
 

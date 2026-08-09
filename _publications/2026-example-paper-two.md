@@ -2,7 +2,7 @@
 layout: single
 title: "Preprint Example: Demonstrating Multiple Entries in One Year"
 date: 2026-07-01
-type: "preprint"
+category: "preprint"
 venue: "Example Preprint"
 paperurl: "https://example.com/"
 highlight: "Optional notes appear at the right side of the venue row."

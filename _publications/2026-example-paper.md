@@ -2,7 +2,7 @@
 layout: single
 title: "Conference Paper Example: Explaining the Publication Cell"
 date: 2026-01-01
-type: "conference"
+category: "conference"
 venue: "Example Conference"
 paperurl: "https://example.com/"
 highlight: "Add an oral, spotlight, award, or featured-paper note here."

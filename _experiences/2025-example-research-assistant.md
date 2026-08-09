@@ -5,6 +5,7 @@ period: "2025 – Present"
 category: "research"
 organization: "Example University"
 summary: "Use this field for one sentence about your role, research area, and contribution."
+thumbnail: "/images/profile.png"
 link: "/cv/#research-experience"
 ---
 

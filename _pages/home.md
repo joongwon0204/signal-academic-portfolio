@@ -100,7 +100,7 @@ description: "A neutral demonstration of the Signal Academic Portfolio template.
     <div class="signal-experience-list">
       {% assign sorted_experiences = site.experiences | sort: "date" | reverse %}
       {% for experience in sorted_experiences limit:3 %}
-        {% include signal-content-row.html item=experience kind="experience" %}
+        {% include signal-content-row.html item=experience key="experiences" %}
       {% endfor %}
     </div>
     <a class="signal-more-link" href="{{ '/experiences/' | relative_url }}">Open all experiences <span aria-hidden="true">→</span></a>
@@ -118,7 +118,7 @@ description: "A neutral demonstration of the Signal Academic Portfolio template.
     <div class="signal-note-list">
       {% assign notes_posts = site.posts | where: "key", "notes" %}
       {% for post in notes_posts limit:3 %}
-        {% include signal-content-row.html item=post kind="note" %}
+        {% include signal-content-row.html item=post key="notes" %}
       {% endfor %}
     </div>
     <a class="signal-more-link" href="{{ '/notes/' | relative_url }}">Open the notes archive <span aria-hidden="true">→</span></a>

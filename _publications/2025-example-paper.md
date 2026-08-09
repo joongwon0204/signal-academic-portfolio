@@ -2,7 +2,7 @@
 layout: single
 title: "Journal Article Example: Demonstrating Automatic Year Grouping"
 date: 2025-06-01
-type: "journal"
+category: "journal"
 venue: "Example Journal"
 paperurl: "https://example.com/"
 highlight: "Use this field for an award, oral presentation, or other featured note."

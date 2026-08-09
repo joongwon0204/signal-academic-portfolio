@@ -1,12 +1,12 @@
 {% assign publication = include.publication %}
-{% assign publication_type = publication.type | default: publication.category | downcase %}
+{% assign publication_type = publication.category | default: publication.type | downcase %}
 {% assign primary_author = publication.primary_author | default: site.data.profile.display_name %}
 {% if publication.paperurl %}
   {% assign publication_link = publication.paperurl %}
 {% else %}
   {% assign publication_link = publication.url | relative_url %}
 {% endif %}
-<a class="signal-publication-row" href="{{ publication_link }}"{% if publication.paperurl %} target="_blank" rel="noopener noreferrer"{% endif %} data-signal-category="{{ publication_type }}" aria-label="Open paper: {{ publication.title | escape }}">
+<a class="signal-publication-row" href="{{ publication_link }}"{% if publication.paperurl %} target="_blank" rel="noopener noreferrer"{% endif %} data-signal-archive-row data-signal-category="{{ publication_type | escape }}" aria-label="Open paper: {{ publication.title | escape }}">
   <span class="signal-publication-row__visual" aria-hidden="true">
     <span>{{ publication.thumbnail_label | default: publication_type | upcase }}</span>
   </span>

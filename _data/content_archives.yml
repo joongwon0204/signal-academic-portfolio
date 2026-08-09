@@ -1,11 +1,19 @@
 experiences:
   source: "experiences"
-  row_kind: "experience"
+  group_by: "category"
+  cell: "archive"
 
 notes:
   source: "posts"
-  row_kind: "note"
+  group_by: "category"
+  cell: "archive"
 
 talks:
   source: "posts"
-  row_kind: "note"
+  group_by: "category"
+  cell: "archive"
+
+publications:
+  source: "publications"
+  group_by: "year"
+  cell: "publication"

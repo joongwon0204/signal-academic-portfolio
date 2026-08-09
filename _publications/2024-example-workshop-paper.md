@@ -2,7 +2,7 @@
 layout: single
 title: "Workshop Paper Example: Presenting an Early Research Direction"
 date: 2024-08-15
-type: "conference"
+category: "conference"
 venue: "Example Systems Workshop"
 paperurl: "https://example.com/papers/workshop"
 highlight: "Workshop paper"

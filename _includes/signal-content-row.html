@@ -1,46 +1,33 @@
 {% assign item = include.item %}
-{% assign content_kind = include.kind | default: 'note' %}
+{% assign cell = include.cell | default: 'archive' %}
 {% assign content_key = include.key %}
-{% assign organization = nil %}
 
-{% if content_kind == 'experience' %}
-  {% assign category_slug = item.category %}
-  {% assign period = item.period %}
-  {% assign organization = item.organization %}
-  {% assign summary = item.summary %}
-  {% assign item_link = item.link | default: item.url %}
-  {% unless content_key %}{% assign content_key = 'experiences' %}{% endunless %}
+{% if cell == 'publication' %}
+  {% include signal-publication-row.html publication=item %}
 {% else %}
-  {% assign category_slug = item.categories | first %}
-  {% assign period = item.date | date: "%b %d, %Y" | upcase %}
-  {% assign summary = item.subtitle %}
+  {% assign category_slug = item.category %}
+  {% unless category_slug %}{% assign category_slug = item.categories | first %}{% endunless %}
+  {% assign period = item.period %}
+  {% assign period_is_date = false %}
+  {% unless period %}
+    {% assign period = item.date | date: "%b %d, %Y" | upcase %}
+    {% assign period_is_date = true %}
+  {% endunless %}
+  {% assign organization = item.organization %}
+  {% assign summary = item.summary | default: item.subtitle %}
   {% assign item_link = item.link | default: item.url %}
-  {% unless content_key %}{% assign content_key = 'notes' %}{% endunless %}
-{% endif %}
+  {% assign category_label = category_slug %}
+  {% assign category_groups = site.data.content_groups[content_key] %}
+  {% for category_group in category_groups %}
+    {% if category_group.slug == category_slug %}{% assign category_label = category_group.label %}{% endif %}
+  {% endfor %}
+  {% assign is_external_link = false %}
+  {% if item_link contains '://' %}{% assign is_external_link = true %}{% endif %}
 
-{% assign category_groups = site.data.content_groups[content_key] %}
-
-{% assign category_label = category_slug %}
-{% for category_group in category_groups %}
-  {% if category_group.slug == category_slug %}
-    {% assign category_label = category_group.label %}
-  {% endif %}
-{% endfor %}
-
-{% assign is_external_link = false %}
-{% if item_link contains '://' %}{% assign is_external_link = true %}{% endif %}
-
-<a class="signal-experience-row{% if content_kind == 'note' %} signal-experience-row--note{% endif %}" data-content-kind="{{ content_kind }}" data-content-category="{{ category_slug }}" href="{% if is_external_link %}{{ item_link }}{% else %}{{ item_link | relative_url }}{% endif %}"{% if is_external_link %} target="_blank" rel="noopener noreferrer"{% endif %}>
-  {% if content_kind == 'note' %}
-    <time class="signal-experience-row__period" datetime="{{ item.date | date_to_xmlschema }}">{{ period }}</time>
+  {% assign thumbnail = item.thumbnail | default: item.image %}
+  {% if thumbnail %}
+    {% include signal-thumbnail-row.html item=item period=period period_is_date=period_is_date organization=organization summary=summary item_link=item_link category_slug=category_slug category_label=category_label is_external_link=is_external_link %}
   {% else %}
-    <span class="signal-experience-row__period">{{ period }}</span>
+    {% include signal-plain-row.html item=item period=period period_is_date=period_is_date organization=organization summary=summary item_link=item_link category_slug=category_slug category_label=category_label is_external_link=is_external_link %}
   {% endif %}
-  <span class="signal-experience-row__content">
-    {% if organization %}<span class="signal-experience-row__organization">{{ organization }}</span>{% endif %}
-    <h3>{{ item.title }}</h3>
-    {% if summary %}<p>{{ summary }}</p>{% endif %}
-  </span>
-  <span class="signal-experience-row__type">{{ category_label }}</span>
-  <span class="signal-experience-row__arrow" aria-hidden="true">→</span>
-</a>
+{% endif %}
