@@ -69,6 +69,44 @@ The CV is assembled from ordered Markdown cells and keeps its timeline, section 
 
 The template has four content workflows: Main page, shared archive pages, Publications, and CV. Adding an entry to any of them does not require copying page HTML.
 
+### 0. File structure and generation mechanism
+
+The repository separates content, page configuration, rendering, and presentation so that normal updates stay in Markdown or YAML:
+
+```text
+.
+├── _config.yml                  # Site URL, collections, defaults, and contact settings
+├── _data/
+│   ├── profile.yml              # Home profile and research-interest content
+│   ├── navigation.yml           # Top-menu order and labels
+│   ├── content_archives.yml     # Archive key → content source and row kind
+│   ├── content_groups.yml       # Archive category order, headings, and labels
+│   └── cv_sections.yml          # CV section order and headings
+├── _pages/                      # Thin page definitions, keys, titles, and permalinks
+├── _experiences/                # Collection-backed archive entries
+├── _posts/                      # Dated Notes, Talks, and other post-backed entries
+├── _publications/               # One Markdown file per publication
+├── _cv/                         # One Markdown file per CV cell
+├── _layouts/                    # Shared page shells and archive-generation logic
+├── _includes/                   # Reusable rows, header, footer, CV cells, and graphics
+├── assets/
+│   ├── css/signal.scss          # Responsive visual system
+│   └── js/signal.js             # Filters, hover states, navigation, and interactions
+├── images/                      # Profile image, icons, and README screenshots
+└── .github/workflows/pages.yml  # GitHub Pages build and deployment
+```
+
+Generation follows the same pipeline across the site:
+
+1. **Content** — Jekyll loads front matter and Markdown bodies from `_posts/` and the configured collections.
+2. **Configuration** — YAML files in `_data/` define profile text, navigation, archive sources, category groups, and CV section order.
+3. **Routing** — a thin file in `_pages/` provides the page `key`, title, permalink, and layout without containing repeated archive HTML.
+4. **Rendering** — Liquid code in `_layouts/` looks up the page key, selects and sorts matching entries, then delegates each row or cell to `_includes/`.
+5. **Presentation** — `signal.scss` supplies the responsive layout and color system; `signal.js` adds filtering and interaction without owning content.
+6. **Deployment** — the GitHub Pages workflow builds the resulting static HTML whenever the configured branch is published.
+
+In practice, content edits belong in Markdown, ordering and labels belong in YAML, and reusable HTML changes belong in `_layouts/` or `_includes/`.
+
 ### 1. Main page
 
 Use `_data/profile.yml` for the visible profile and research-interest content:
