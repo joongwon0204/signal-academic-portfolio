@@ -1,18 +1,4 @@
 {% assign profile = site.data.profile %}
-{% assign is_publications = false %}
-{% assign is_experiences = false %}
-{% assign is_notes = false %}
-{% if page.url == '/publications/' or page.collection == 'publications' %}
-  {% assign is_publications = true %}
-{% endif %}
-{% if page.url == '/experiences/' or page.collection == 'experiences' %}
-  {% assign is_experiences = true %}
-{% endif %}
-{% if page.url == '/notes/' %}
-  {% assign is_notes = true %}
-{% elsif page.collection == 'posts' and page.archive_key == 'notes' %}
-  {% assign is_notes = true %}
-{% endif %}
 
 <header class="signal-header" data-signal-header>
   <div class="signal-shell signal-header__inner">
@@ -26,10 +12,19 @@
     </button>
 
     <nav class="signal-nav" id="signal-navigation" aria-label="Primary navigation" data-signal-nav>
-      <a href="{{ '/publications/' | relative_url }}"{% if is_publications %} class="is-active" aria-current="page"{% endif %}>Publications</a>
-      <a href="{{ '/experiences/' | relative_url }}"{% if is_experiences %} class="is-active" aria-current="page"{% endif %}>Experiences</a>
-      <a href="{{ '/notes/' | relative_url }}"{% if is_notes %} class="is-active" aria-current="page"{% endif %}>Notes</a>
-      <a href="{{ '/cv/' | relative_url }}"{% if page.url == '/cv/' %} class="is-active" aria-current="page"{% endif %}>CV</a>
+      {% for nav_item in site.data.navigation %}
+        {% assign nav_key = nav_item.match_key %}
+        {% unless nav_key %}{% assign nav_key = nav_item.url | remove: '/' %}{% endunless %}
+        {% assign is_active = false %}
+        {% if page.url == nav_item.url %}
+          {% assign is_active = true %}
+        {% elsif page.collection == nav_key %}
+          {% assign is_active = true %}
+        {% elsif page.archive_key == nav_key %}
+          {% assign is_active = true %}
+        {% endif %}
+        <a href="{{ nav_item.url | relative_url }}"{% if is_active %} class="is-active" aria-current="page"{% endif %}>{{ nav_item.label }}</a>
+      {% endfor %}
     </nav>
   </div>
   <div class="signal-header__rule" aria-hidden="true"><i></i></div>

@@ -66,6 +66,7 @@ Most visible content is generated from Markdown front matter and YAML data. Add 
 ### Content map
 
 - `_data/profile.yml`: home-page name, introduction, hero artwork, and research-interest labels
+- `_data/navigation.yml`: ordered top-navigation labels and URLs
 - `_config.yml`: site URL, repository, email, GitHub username, and downloadable CV path
 - `_publications/*.md`: one Markdown file per publication
 - `_experiences/*.md`: one Markdown file per experience, award, teaching role, or service activity
@@ -255,7 +256,16 @@ The included Talks page demonstrates how to reuse the same dynamic archive witho
    ---
    ```
 
-The shared layout then creates the category sections, rows, dates, labels, and detail links automatically. A new archive is not added to the top navigation automatically; add its link to `_includes/signal-header.html` only if it should be globally visible.
+The shared layout then creates the category sections, rows, dates, labels, and detail links automatically.
+
+5. Add the page to the top navigation only if it should be globally visible. Edit `_data/navigation.yml`, not the header HTML:
+
+   ```yaml
+   - label: "Talks"
+     url: "/talks/"
+   ```
+
+   Menu order follows the YAML order. The active state is inferred from the URL segment, collection name, or `archive_key`. If those names intentionally differ, add `match_key: "talks"` to the navigation item.
 
 ### 7. Edit the CV page and downloadable PDF
 
