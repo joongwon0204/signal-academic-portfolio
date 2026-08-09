@@ -59,69 +59,75 @@ author:
 4. Replace the neutral examples described below.
 5. In **Settings → Pages**, select **GitHub Actions** as the source.
 
-## What to edit
+## How to use
 
-- `_data/profile.yml`: display name, introduction, hero artwork, and three research-interest labels
-- `_data/content_archives.yml`: one central source and row-style mapping for each archive key
-- `_data/content_groups.yml`: category slugs, labels, and group headings for Experiences, Notes, and custom archives
-- `_experiences/*.md`: one Markdown file per experience, award, or other milestone
-- `_posts/*.md`: one dated Markdown file per project log or study note
+Most visible content is generated from Markdown front matter and YAML data. Add or edit those files, rebuild the site, and Jekyll updates the archive groups, dates, labels, links, and detail pages without requiring page-specific HTML.
+
+### Content map
+
+- `_data/profile.yml`: home-page name, introduction, hero artwork, and research-interest labels
+- `_config.yml`: site URL, repository, email, GitHub username, and downloadable CV path
 - `_publications/*.md`: one Markdown file per publication
-- `_pages/cv.md`: detailed CV sections
-- `assets/example-cv.pdf`: replace the downloadable neutral CV example with your own PDF
-- `images/profile.png`: hero artwork or profile image
+- `_experiences/*.md`: one Markdown file per experience, award, teaching role, or service activity
+- `_posts/*.md`: dated Notes, Talks, and other post-based archive entries
+- `_data/content_groups.yml`: group order, headings, and short category labels
+- `_data/content_archives.yml`: the content source and row style used by each archive key
+- `_pages/*.md`: page title, introduction, permalink, and CV page structure
 
-The home-page cells and archive pages are generated from those sources. Adding content normally does not require copying or editing HTML.
+### 1. Configure the site and contact links
 
-### Preserve an old URL after renaming a page
-
-`permalink` is the page's current canonical URL. Add `redirect_from` only when a previously published URL must continue working after a migration:
-
-```yaml
----
-permalink: /experiences/
-redirect_from:
-  - /old-experiences/
----
-```
-
-Do not list the current permalink under `redirect_from`. Fresh template installations do not need redirects, so this repository does not include site-specific legacy paths by default.
-
-### Add an experience
+Edit `_config.yml` once for the deployed repository and contact buttons:
 
 ```yaml
----
-title: "Research Assistant, Example Lab"
-date: 2026-01-01
-period: "2026 – Present"
-category: "research"
-organization: "Example University"
-summary: "One concise sentence describing the role and contribution."
-link: "/cv/#research-experience"
----
+url: "https://<username>.github.io"
+baseurl: "" # use "/<repository>" for a project site
+repository: "<username>/<repository>"
+
+author:
+  email: "you@example.com"
+  github: "<username>"
+  cv_pdf: "/assets/your-cv.pdf"
 ```
 
-The `category` value must match an `experiences` slug in `_data/content_groups.yml`. The included examples demonstrate research, teaching, service, and honors groups. Entries with the same category are grouped automatically.
+The email and GitHub values generate the Home contact buttons. `cv_pdf` generates the CV download button; remove that field to hide the button.
 
-### Add a note
+### 2. Edit the Home page
 
-Create a dated file under `_posts/`:
+Edit `_data/profile.yml` to change the hero and research-interest diagram:
 
 ```yaml
----
-layout: single
-title: "A Reproducible Research Workflow"
-subtitle: "A short description shown in the archive cell"
-archive_key: notes
-categories: [project]
----
+display_name: "Your Name"
+given_name: "Your"
+family_name: "Name"
+native_name: ""
+eyebrow: "Portfolio"
+summary: "A concise degree, role, or professional summary."
+intro: "A short introduction to your background and current work."
+
+image:
+  path: "/images/profile.png"
+  alt: "Description of the profile image"
+
+research:
+  section_label: "Research Interest"
+  intro: "One sentence connecting the three areas."
+  interests:
+    - key: "codesign"
+      short_label: "Primary Research Area"
+      full_label: "Primary Research Area"
+    - key: "accelerators"
+      short_label: "Supporting Method"
+      full_label: "Supporting Method"
+    - key: "inference"
+      short_label: "Application Domain"
+      full_label: "Application Domain"
 ```
 
-The first category selects the group and label defined under `notes` in `_data/content_groups.yml`. The included examples cover project logs, study records, tutorials, and research reflections.
+Keep the three supplied `key` values unless you also update the research-map HTML and CSS; the labels are safe to replace freely. The Home page automatically shows the three newest Experiences and three newest posts with `archive_key: notes`.
 
-Archive pages themselves use one routing field only. For example, `_pages/notes.md` contains `archive_key: notes`; the shared layout gets its source and row style from `_data/content_archives.yml` and its ordered groups from `_data/content_groups.yml`. The included `_pages/talks.md` and talk posts show the same pattern for an additional archive.
+### 3. Add or edit Publications
 
-### Add a publication
+Create one file per paper under `_publications/`, for example `_publications/2026-example-paper.md`:
 
 ```yaml
 ---
@@ -138,9 +144,144 @@ authors:
   - "Your Name"
   - "Coauthor Name"
 ---
+
+Optional detail-page content can be written here in Markdown.
 ```
 
-Publications are sorted by `date`, grouped under automatically generated year headings, and filterable by `conference`, `journal`, or `preprint`. The complete cell links to `paperurl`; if it is omitted, the generated detail page is used.
+The Publications page automatically:
+
+- sorts entries by `date` in descending order;
+- creates year headings from `date`;
+- filters entries by `type: conference`, `journal`, or `preprint`;
+- emphasizes the author matching `primary_author`;
+- places `venue` on the left and `highlight` on the right;
+- links the complete cell to `paperurl`, or to the generated detail page when `paperurl` is omitted.
+
+Edit `_pages/publications.md` only when changing the archive title or introduction, not when adding a paper.
+
+### 4. Add or edit Experiences
+
+Create one file per entry under `_experiences/`:
+
+```yaml
+---
+title: "Research Assistant, Example Lab"
+date: 2026-01-01
+period: "2026 – Present"
+category: "research"
+organization: "Example University"
+summary: "One concise sentence describing the role and contribution."
+link: "/cv/#research-experience"
+---
+
+Optional experience detail content can be written here in Markdown.
+```
+
+`date` controls sorting, while `period` is the text displayed in the cell. `category` must match an `experiences` slug in `_data/content_groups.yml`. Entries are grouped and labeled automatically in that configured order. `link` may be an internal path or an external URL; omit it to use the generated detail page.
+
+Edit `_pages/experiences.md` only to change the archive title, introduction, permalink, or section number.
+
+### 5. Add or edit Notes
+
+Create a dated post such as `_posts/2026-01-15-research-workflow.md`:
+
+```yaml
+---
+layout: single
+title: "A Reproducible Research Workflow"
+subtitle: "A short description shown in the archive cell"
+archive_key: notes
+categories: [project]
+---
+
+## First section
+
+Write the complete note in Markdown.
+```
+
+The `YYYY-MM-DD` filename supplies the date unless a `date` field overrides it. `archive_key: notes` sends the post to the Notes archive, and the first category selects its group and label from `_data/content_groups.yml`. The included groups are project, study, tutorial, and reflection. Each post automatically receives a detail page and a return link to Notes.
+
+Edit `_pages/notes.md` only to change the archive title, introduction, permalink, or section number.
+
+### 6. Create another post-based archive
+
+The included Talks page demonstrates how to reuse the same dynamic archive without copying its HTML.
+
+1. Register the archive once in `_data/content_archives.yml`:
+
+   ```yaml
+   talks:
+     source: "posts"
+     row_kind: "note"
+   ```
+
+2. Define its ordered categories in `_data/content_groups.yml`:
+
+   ```yaml
+   talks:
+     - slug: "invited"
+       title: "Invited Talks"
+       label: "Invited"
+     - slug: "conference"
+       title: "Conference Talks"
+       label: "Conference"
+   ```
+
+3. Create a thin page such as `_pages/talks.md`. The page needs only one routing field:
+
+   ```yaml
+   ---
+   layout: signal-collection
+   title: "Talks"
+   description: "Talks and presentations."
+   intro: "A short archive introduction."
+   permalink: /talks/
+   archive_key: talks
+   section_number: "04"
+   ---
+   ```
+
+4. Add dated posts with the same archive key:
+
+   ```yaml
+   ---
+   layout: single
+   title: "Example Invited Talk"
+   archive_key: talks
+   categories: [invited]
+   subtitle: "Where and why the talk was presented."
+   archive_path: /talks/
+   archive_label: "Back to Talks"
+   ---
+   ```
+
+The shared layout then creates the category sections, rows, dates, labels, and detail links automatically. A new archive is not added to the top navigation automatically; add its link to `_includes/signal-header.html` only if it should be globally visible.
+
+### 7. Edit the CV page and downloadable PDF
+
+The CV header name, summary, and research-interest list reuse `_data/profile.yml`. Edit the timeline sections directly in `_pages/cv.md`; duplicate or remove a `signal-timeline__section` block to change the visible CV structure.
+
+Replace `assets/example-cv.pdf` with your own file and update `author.cv_pdf` in `_config.yml`. The file path controls the download button independently from the on-page CV content.
+
+### 8. Replace images and example content
+
+- Replace `images/profile.png` or update `image.path` in `_data/profile.yml`.
+- Replace or delete the neutral files in `_publications/`, `_experiences/`, and `_posts/`.
+- Keep category slugs synchronized with `_data/content_groups.yml`; an entry with an unknown category is not shown in a configured archive group.
+
+### 9. Preserve an old URL after renaming a page
+
+`permalink` is the page's current canonical URL. Add `redirect_from` only when a previously published URL must continue working after a migration:
+
+```yaml
+---
+permalink: /experiences/
+redirect_from:
+  - /old-experiences/
+---
+```
+
+Do not list the current permalink under `redirect_from`. Fresh template installations do not need redirects, so this repository does not include site-specific legacy paths by default.
 
 ## Run locally
 
