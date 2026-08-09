@@ -66,14 +66,33 @@ Most visible content is generated from Markdown front matter and YAML data. Add 
 ### Content map
 
 - `_data/profile.yml`: home-page name, introduction, hero artwork, and research-interest labels
-- `_data/navigation.yml`: ordered top-navigation labels and URLs
+- `_data/navigation.yml`: ordered top-navigation keys and labels; URLs are resolved from matching pages
 - `_config.yml`: site URL, repository, email, GitHub username, and downloadable CV path
 - `_publications/*.md`: one Markdown file per publication
 - `_experiences/*.md`: one Markdown file per experience, award, teaching role, or service activity
 - `_posts/*.md`: dated Notes, Talks, and other post-based archive entries
 - `_data/content_groups.yml`: group order, headings, and short category labels
-- `_data/content_archives.yml`: the content source and row style used by each archive key
-- `_pages/*.md`: page title, introduction, permalink, and CV page structure
+- `_data/content_archives.yml`: the content source and row style registered under each key
+- `_pages/*.md`: page title, introduction, key, permalink, and CV page structure
+
+### One shared `key`
+
+Every navigable archive uses one stable `key`. The same field connects its page, its post entries, and its optional navigation item:
+
+```yaml
+# _pages/notes.md
+key: notes
+permalink: /notes/
+
+# _posts/2026-01-15-example.md
+key: notes
+
+# _data/navigation.yml
+- key: notes
+  label: "Notes"
+```
+
+The URL belongs only to the page through `permalink`. Navigation and detail-page return links find that page by `key`, so changing `/notes/` to `/writing/` requires changing only the page permalink. Keep page keys unique across the site.
 
 ### 1. Configure the site and contact links
 
@@ -124,7 +143,7 @@ research:
       full_label: "Application Domain"
 ```
 
-Keep the three supplied `key` values unless you also update the research-map HTML and CSS; the labels are safe to replace freely. The Home page automatically shows the three newest Experiences and three newest posts with `archive_key: notes`.
+Keep the three supplied research-interest `key` values unless you also update the research-map HTML and CSS; the labels are safe to replace freely. The Home page automatically shows the three newest Experiences and three newest posts with `key: notes`.
 
 ### 3. Add or edit Publications
 
@@ -191,7 +210,7 @@ Create a dated post such as `_posts/2026-01-15-research-workflow.md`:
 layout: single
 title: "A Reproducible Research Workflow"
 subtitle: "A short description shown in the archive cell"
-archive_key: notes
+key: notes
 categories: [project]
 ---
 
@@ -200,7 +219,7 @@ categories: [project]
 Write the complete note in Markdown.
 ```
 
-The `YYYY-MM-DD` filename supplies the date unless a `date` field overrides it. `archive_key: notes` sends the post to the Notes archive, and the first category selects its group and label from `_data/content_groups.yml`. The included groups are project, study, tutorial, and reflection. Each post automatically receives a detail page and a return link to Notes.
+The `YYYY-MM-DD` filename supplies the date unless a `date` field overrides it. `key: notes` sends the post to the Notes archive, and the first category selects its group and label from `_data/content_groups.yml`. The included groups are project, study, tutorial, and reflection. Each post automatically receives a detail page and a return link to the page whose `key` is `notes`.
 
 Edit `_pages/notes.md` only to change the archive title, introduction, permalink, or section number.
 
@@ -237,22 +256,20 @@ The included Talks page demonstrates how to reuse the same dynamic archive witho
    description: "Talks and presentations."
    intro: "A short archive introduction."
    permalink: /talks/
-   archive_key: talks
+   key: talks
    section_number: "04"
    ---
    ```
 
-4. Add dated posts with the same archive key:
+4. Add dated posts with the same key:
 
    ```yaml
    ---
    layout: single
    title: "Example Invited Talk"
-   archive_key: talks
+   key: talks
    categories: [invited]
    subtitle: "Where and why the talk was presented."
-   archive_path: /talks/
-   archive_label: "Back to Talks"
    ---
    ```
 
@@ -261,11 +278,11 @@ The shared layout then creates the category sections, rows, dates, labels, and d
 5. Add the page to the top navigation only if it should be globally visible. Edit `_data/navigation.yml`, not the header HTML:
 
    ```yaml
-   - label: "Talks"
-     url: "/talks/"
+   - key: talks
+     label: "Talks"
    ```
 
-   Menu order follows the YAML order. The active state is inferred from the URL segment, collection name, or `archive_key`. If those names intentionally differ, add `match_key: "talks"` to the navigation item.
+   Menu order follows the YAML order. The header finds the page whose `key` is `talks` and uses that page's generated URL, so the navigation file does not repeat the permalink. The same key controls the active state on the archive and its detail pages.
 
 ### 7. Edit the CV page and downloadable PDF
 

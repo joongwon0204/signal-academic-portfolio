@@ -13,17 +13,18 @@
 
     <nav class="signal-nav" id="signal-navigation" aria-label="Primary navigation" data-signal-nav>
       {% for nav_item in site.data.navigation %}
-        {% assign nav_key = nav_item.match_key %}
-        {% unless nav_key %}{% assign nav_key = nav_item.url | remove: '/' %}{% endunless %}
-        {% assign is_active = false %}
-        {% if page.url == nav_item.url %}
-          {% assign is_active = true %}
-        {% elsif page.collection == nav_key %}
-          {% assign is_active = true %}
-        {% elsif page.archive_key == nav_key %}
-          {% assign is_active = true %}
+        {% assign nav_target = site.pages | where: "key", nav_item.key | first %}
+        {% if nav_target %}
+          {% assign is_active = false %}
+          {% if page.url == nav_target.url %}
+            {% assign is_active = true %}
+          {% elsif page.key == nav_item.key %}
+            {% assign is_active = true %}
+          {% elsif page.collection == nav_item.key %}
+            {% assign is_active = true %}
+          {% endif %}
+          <a href="{{ nav_target.url | relative_url }}"{% if is_active %} class="is-active" aria-current="page"{% endif %}>{{ nav_item.label }}</a>
         {% endif %}
-        <a href="{{ nav_item.url | relative_url }}"{% if is_active %} class="is-active" aria-current="page"{% endif %}>{{ nav_item.label }}</a>
       {% endfor %}
     </nav>
   </div>

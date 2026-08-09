@@ -2,7 +2,7 @@
 layout: single
 title: "Releasing an Interactive Research Demo"
 subtitle: "A project log covering scope, interface decisions, validation, and release notes"
-archive_key: notes
+key: notes
 categories: [project]
 ---
 

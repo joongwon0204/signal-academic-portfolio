@@ -2,7 +2,7 @@
 layout: single
 title: "Adding a New Content Category"
 subtitle: "A short tutorial for extending the data-driven archive without duplicating HTML"
-archive_key: notes
+key: notes
 categories: [tutorial]
 ---
 

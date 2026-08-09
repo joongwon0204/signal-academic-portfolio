@@ -7,25 +7,10 @@ layout: signal
 {% if page.collection == 'posts' %}
   {% assign is_note_article = true %}
 {% endif %}
-{% assign archive_url = '/notes/' %}
-{% assign archive_label = 'Back to notes' %}
-{% if page.collection == 'publications' %}
-  {% assign archive_url = '/publications/' %}
-  {% assign archive_label = 'Back to publications' %}
-{% elsif page.collection == 'experiences' %}
-  {% assign archive_url = '/experiences/' %}
-  {% assign archive_label = 'Back to experiences' %}
-{% endif %}
-{% if page.archive_path %}
-  {% assign archive_url = page.archive_path %}
-{% elsif page.back_url %}
-  {% assign archive_url = page.back_url %}
-{% endif %}
-{% if page.archive_label %}
-  {% assign archive_label = page.archive_label %}
-{% elsif page.back_label %}
-  {% assign archive_label = page.back_label %}
-{% endif %}
+{% assign content_key = page.key | default: page.collection %}
+{% assign archive_page = site.pages | where: "key", content_key | first %}
+{% assign archive_url = archive_page.url | default: '/' %}
+{% capture archive_label %}Back to {{ archive_page.title | default: 'Home' }}{% endcapture %}
 <article class="signal-shell signal-article{% if is_note_article %} signal-article--note{% endif %}" itemscope itemtype="https://schema.org/Article">
   <header class="signal-article__head signal-reveal">
     <div class="signal-article__meta">

@@ -3,6 +3,7 @@ layout: signal
 title: "Publications"
 description: "Example publication entries and instructions for the publication archive."
 permalink: /publications/
+key: publications
 ---
 
 <section class="signal-shell signal-index">

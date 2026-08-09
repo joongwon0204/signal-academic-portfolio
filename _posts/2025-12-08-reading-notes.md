@@ -2,7 +2,7 @@
 layout: single
 title: "Structuring Literature Review Notes"
 subtitle: "Use study records for bounded summaries, evidence, and follow-up questions"
-archive_key: notes
+key: notes
 categories: [study]
 ---
 

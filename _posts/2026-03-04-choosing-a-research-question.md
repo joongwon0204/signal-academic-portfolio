@@ -2,7 +2,7 @@
 layout: single
 title: "From a Broad Topic to a Testable Question"
 subtitle: "A reflection on narrowing scope before implementation begins"
-archive_key: notes
+key: notes
 categories: [reflection]
 ---
 

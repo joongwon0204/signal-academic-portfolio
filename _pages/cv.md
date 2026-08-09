@@ -3,6 +3,7 @@ layout: signal
 title: "CV"
 description: "Example curriculum vitae sections for the Signal Academic Portfolio template."
 permalink: /cv/
+key: cv
 ---
 
 {% assign profile = site.data.profile %}

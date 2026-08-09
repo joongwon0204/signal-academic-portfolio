@@ -1,11 +1,11 @@
-- label: "Publications"
-  url: "/publications/"
+- key: "publications"
+  label: "Publications"
 
-- label: "Experiences"
-  url: "/experiences/"
+- key: "experiences"
+  label: "Experiences"
 
-- label: "Notes"
-  url: "/notes/"
+- key: "notes"
+  label: "Notes"
 
-- label: "CV"
-  url: "/cv/"
+- key: "cv"
+  label: "CV"
