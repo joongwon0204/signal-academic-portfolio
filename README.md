@@ -4,6 +4,8 @@ Signal Academic Portfolio is a light, interactive Jekyll template for researcher
 
 Every person, institution, lab, project, and publication included in this repository is neutral example content. Replace the examples before publishing your own site.
 
+example site : https://joongwon0204.github.io/signal-academic-portfolio/
+
 ## Design
 
 The visual system is built around four ideas:
