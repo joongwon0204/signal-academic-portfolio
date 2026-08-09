@@ -5,6 +5,7 @@
 </p>
 
 <p align="center">
+  <a href="https://jekyll-themes.com/joongwon0204/signal-academic-portfolio"><img src="https://img.shields.io/badge/featured%20on-JT-red.svg" height="20" alt="Jekyll Themes Shield"></a>
   <a href="https://joongwon0204.github.io/signal-academic-portfolio/"><img alt="Live Demo" src="https://img.shields.io/badge/Live_Demo-Open_site-0799a8?style=for-the-badge"></a>
   <a href="https://github.com/joongwon0204/signal-academic-portfolio/generate"><img alt="Use This Template" src="https://img.shields.io/badge/Use_This_Template-Create_repository-6655ff?style=for-the-badge&logo=github"></a>
   <a href="https://github.com/joongwon0204/signal-academic-portfolio/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/v/release/joongwon0204/signal-academic-portfolio?style=for-the-badge&color=2f6fed"></a>
